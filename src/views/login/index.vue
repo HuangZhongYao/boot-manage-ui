@@ -145,14 +145,14 @@ async function handleLogin(isQuick) {
   try {
     loading.value = true
     $message.loading('正在验证，请稍后...', { key: 'login' })
-    const { data } = await api.login({ username, password: password.toString(), captcha, isQuick })
+    const { result } = await api.login({ username, password: password.toString(), captcha, isQuick })
     if (isRemember.value) {
       lStorage.set('loginInfo', { username, password })
     }
     else {
       lStorage.remove('loginInfo')
     }
-    onLoginSuccess(data)
+    onLoginSuccess(result)
   }
   catch (error) {
     // 10003为验证码错误专属业务码

@@ -141,9 +141,9 @@ async function handleAvatarSave() {
 }
 
 const genders = [
-  { label: '保密', value: 0 },
-  { label: '男', value: 1 },
-  { label: '女', value: 2 },
+  { label: '保密', value: 'UNKNOWN' },
+  { label: '男', value: 'MALE' },
+  { label: '女', value: 'FEMALE' },
 ]
 const [profileModalRef] = useModal()
 const [profileFormRef, profileForm, profileValidation] = useForm({
