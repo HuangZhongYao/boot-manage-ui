@@ -100,7 +100,7 @@ export function useCrud({ name, initForm = {}, doCreate, doDelete, doUpdate, ref
           const data = await doDelete(id)
           $message.success('删除成功')
           d.loading = false
-          refresh(data)
+          refresh(data, true)
         }
         catch (error) {
           d.loading = false

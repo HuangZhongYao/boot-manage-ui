@@ -13,11 +13,11 @@
         feather图标集 + isme自定义图标
       </n-tag>
     </template>
-    <ul class="flex flex-wrap justify-between">
+    <ul class="grid grid-cols-[repeat(auto-fill,minmax(160px,1fr))] justify-items-center gap-16">
       <li
         v-for="item in icons"
         :key="item"
-        class="m-16 w-160 f-c-c flex-col cursor-pointer rounded-12 px-12 py-24 card-border auto-bg"
+        class="w-160 f-c-c flex-col cursor-pointer rounded-12 px-12 py-24 card-border auto-bg"
         @click="copy(`&lt;i class=&quot;${item}&quot; /&gt;`)"
       >
         <i :class="`${item}?mask`" class="text-28 text-gray-600 hover:bg-primary" />
@@ -28,13 +28,6 @@
           {{ item }}
         </span>
       </li>
-      <li class="mx-16 h-0 w-160" />
-      <li class="mx-16 h-0 w-160" />
-      <li class="mx-16 h-0 w-160" />
-      <li class="mx-16 h-0 w-160" />
-      <li class="mx-16 h-0 w-160" />
-      <li class="mx-16 h-0 w-160" />
-      <li class="mx-16 h-0 w-160" />
     </ul>
   </CommonPage>
 </template>

@@ -120,7 +120,7 @@ const { modalRef, modalFormRef, modalAction, modalForm, handleAdd, handleDelete,
     doDelete: api.delete,
     doUpdate: api.update,
     initForm: { enable: true },
-    refresh: () => $table.value?.handleSearch(),
+    refresh: (_, keepCurrentPage) => $table.value?.handleSearch(keepCurrentPage),
   })
 
 const columns = [

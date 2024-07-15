@@ -23,5 +23,6 @@
     "markdown",
     "json",
     "jsonc"
-  ]
+  ],
+  "common-intellisense.ui": ["naiveUi2"]
 }
