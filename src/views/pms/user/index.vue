@@ -33,7 +33,7 @@
         />
       </MeQueryItem>
 
-      <MeQueryItem label="用户名" :label-width="50">
+      <MeQueryItem label="账号" :label-width="50">
         <n-input
           v-model:value="queryItems.account"
           type="text"
@@ -46,17 +46,6 @@
 
       <MeQueryItem label="性别" :label-width="40">
         <n-select v-model:value="queryItems.gender" clearable :options="genders" />
-      </MeQueryItem>
-
-      <MeQueryItem label="状态" :label-width="40">
-        <NSwitch v-model:value="queryItems.enable" size="medium" :unchecked-value="false" :checked-value="true" :default-value="true" >
-          <template #checked>
-            启用
-          </template>
-          <template #unchecked>
-            禁用
-          </template>
-        </NSwitch>
       </MeQueryItem>
     </MeCrud>
 
@@ -254,8 +243,8 @@ const columns = [
   {
     title: '操作',
     key: 'actions',
-    width: 320,
-    align: 'right',
+    width: 260,
+    align: 'left',
     fixed: 'right',
     hideInExcel: true,
     render(row) {
@@ -319,11 +308,12 @@ async function handleEnable(row) {
 }
 
 function handleOpenRolesSet(row) {
-  const roleIds = row.roles.map(item => item.id)
+  // const roleIds = row.roles.map(item => item.id)
+  const roleIds = []
   handleOpen({
     action: 'setRole',
     title: '分配角色',
-    row: { id: row.id, username: row.username, roleIds },
+    row: { id: row.id, userId: row.id, username: row.username, account: row.account, roleIds },
     onOk: onSave,
   })
 }
@@ -331,7 +321,7 @@ function handleOpenRolesSet(row) {
 function onSave() {
   if (modalAction.value === 'setRole') {
     return handleSave({
-      api: () => api.update(modalForm.value),
+      api: () => api.setRole(modalForm.value),
       cb: () => $message.success('分配成功'),
     })
   }

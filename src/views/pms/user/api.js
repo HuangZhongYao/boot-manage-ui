@@ -34,7 +34,7 @@ export default {
    * @param {Object} data - 包含待更新用户信息的对象，必须包含用户ID。
    * @returns {Promise} - 一个Promise对象，用于处理异步请求的结果。
    */
-  update: data => request.patch(`/user/${data.id}`, data),
+  update: data => request.patch(`/user/editUser`, data),
 
   /**
    * 删除指定ID的用户。
@@ -50,6 +50,13 @@ export default {
    * @returns {Promise} - 一个Promise对象，用于处理异步请求的结果。
    */
   resetPwd: (id, data) => request.patch(`/user/resetPassword`, data),
+
+  /**
+   * 分配用户角色
+   * @param data 包含用户id角色id的对象
+   * @returns {Promise} - 一个Promise对象，用于处理异步请求的结果。
+   */
+  setRole: data => request.patch(`/user/setRole`, data),
 
   /**
    * 获取所有已启用的角色。
