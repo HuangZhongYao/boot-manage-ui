@@ -132,7 +132,7 @@ const genders = [
   { label: '保密', value: 'UNKNOWN' },
 ]
 const roles = ref([])
-api.getAllRoles().then(({ data = [] }) => (roles.value = data))
+api.getAllRoles().then(({ result = [] }) => (roles.value = result))
 
 const {
   modalRef,

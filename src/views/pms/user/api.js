@@ -55,5 +55,5 @@ export default {
    * 获取所有已启用的角色。
    * @returns {Promise} - 一个Promise对象，用于处理异步请求的结果。
    */
-  getAllRoles: () => request.get('/role?enable=1'),
+  getAllRoles: () => request.get('/role/queryList?enable=true'),
 }
