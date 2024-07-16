@@ -12,24 +12,27 @@ import { useAuthStore } from '@/store'
 let isConfirming = false
 export function resolveResError(code, message, needTip = true) {
   switch (code) {
-    case 401:
-      if (isConfirming || !needTip)
-        return
-      isConfirming = true
-      $dialog.confirm({
-        title: '提示',
-        type: 'info',
-        content: '登录已过期，是否重新登录？',
-        confirm() {
-          useAuthStore().logout()
-          window.$message?.success('已退出登录')
-          isConfirming = false
-        },
-        cancel() {
-          isConfirming = false
-        },
-      })
-      return false
+    // 参数验证不通过
+    case 410:
+      // if (isConfirming || !needTip)
+      //   return
+      // isConfirming = true
+      // $dialog.confirm({
+      //   title: '提示',
+      //   type: 'info',
+      //   content: '登录已过期，是否重新登录？',
+      //   confirm() {
+      //     useAuthStore().logout()
+      //     window.$message?.success('已退出登录')
+      //     isConfirming = false
+      //   },
+      //   cancel() {
+      //     isConfirming = false
+      //   },
+      // })
+      // return false
+      message = `表单未填写完: ${message}`
+      break
     case 11007:
     case 11008:
       if (isConfirming || !needTip)
