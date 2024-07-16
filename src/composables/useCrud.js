@@ -86,8 +86,8 @@ export function useCrud({ name, initForm = {}, doCreate, doDelete, doUpdate, ref
   }
 
   /** 删除 */
-  function handleDelete(id, confirmOptions) {
-    if (!id && id !== 0)
+  function handleDelete(data, confirmOptions) {
+    if (!data && data !== 0)
       return
     const d = $dialog.warning({
       content: '确定删除？',
@@ -97,10 +97,11 @@ export function useCrud({ name, initForm = {}, doCreate, doDelete, doUpdate, ref
       async onPositiveClick() {
         try {
           d.loading = true
-          const data = await doDelete(id)
+          debugger
+          const result = await doDelete(data)
           $message.success('删除成功')
           d.loading = false
-          refresh(data, true)
+          refresh(result, true)
         }
         catch (error) {
           d.loading = false

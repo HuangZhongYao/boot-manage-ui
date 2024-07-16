@@ -68,6 +68,17 @@
           <n-input v-model:value="modalForm.username" :disabled="modalAction !== 'add'" />
         </n-form-item>
         <n-form-item
+          label="登录账号"
+          path="account"
+          :rule="{
+            required: true,
+            message: '请输入登录账号',
+            trigger: ['input', 'blur'],
+          }"
+        >
+          <n-input v-model:value="modalForm.account" :disabled="modalAction !== 'add'" />
+        </n-form-item>
+        <n-form-item
           v-if="['add', 'reset'].includes(modalAction)"
           :label="modalAction === 'reset' ? '重置密码' : '初始密码'"
           path="password"
@@ -239,8 +250,8 @@ const columns = [
         h(
           NButton,
           {
-            size: 'small',
-            type: 'primary',
+            size: 'tiny',
+            type: 'info',
             secondary: true,
             onClick: () => handleOpenRolesSet(row),
           },
@@ -252,9 +263,9 @@ const columns = [
         h(
           NButton,
           {
-            size: 'small',
+            size: 'tiny',
             type: 'primary',
-            style: 'margin-left: 12px;',
+            style: 'margin-left: 8px;',
             onClick: () => handleOpen({ action: 'reset', title: '重置密码', row, onOk: onSave }),
           },
           {
@@ -266,10 +277,10 @@ const columns = [
         h(
           NButton,
           {
-            size: 'small',
+            size: 'tiny',
             type: 'error',
-            style: 'margin-left: 12px;',
-            onClick: () => handleDelete(row.id),
+            style: 'margin-left: 8px;',
+            onClick: () => handleDelete({ ids: [row.id] }),
           },
           {
             default: () => '删除',

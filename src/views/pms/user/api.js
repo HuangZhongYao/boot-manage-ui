@@ -38,10 +38,10 @@ export default {
 
   /**
    * 删除指定ID的用户。
-   * @param {string|number} id - 待删除用户的ID。
+   * @param {Object} data - 待删除用户的ID。
    * @returns {Promise} - 一个Promise对象，用于处理异步请求的结果。
    */
-  delete: id => request.delete(`/user/${id}`),
+  delete: data => request.delete('/user/delUser', { data }),
 
   /**
    * 重置指定ID用户的密码。
@@ -49,7 +49,7 @@ export default {
    * @param {Object} data - 包含新密码信息的对象。
    * @returns {Promise} - 一个Promise对象，用于处理异步请求的结果。
    */
-  resetPwd: (id, data) => request.patch(`/user/password/reset/${id}`, data),
+  resetPwd: (id, data) => request.patch(`/user/resetPassword`, data),
 
   /**
    * 获取所有已启用的角色。
