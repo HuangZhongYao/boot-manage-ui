@@ -28,22 +28,35 @@
           type="text"
           placeholder="请输入用户名"
           clearable
+          style="min-width: 70%"
+          autosize
         />
       </MeQueryItem>
 
-      <MeQueryItem label="性别" :label-width="30">
+      <MeQueryItem label="用户名" :label-width="50">
+        <n-input
+          v-model:value="queryItems.account"
+          type="text"
+          placeholder="请输入账号"
+          clearable
+          style="min-width: 70%"
+          autosize
+        />
+      </MeQueryItem>
+
+      <MeQueryItem label="性别" :label-width="40">
         <n-select v-model:value="queryItems.gender" clearable :options="genders" />
       </MeQueryItem>
 
-      <MeQueryItem label="状态" :label-width="30">
-        <n-select
-          v-model:value="queryItems.enable"
-          clearable
-          :options="[
-            { label: '启用', value: 1 },
-            { label: '停用', value: 0 },
-          ]"
-        />
+      <MeQueryItem label="状态" :label-width="40">
+        <NSwitch v-model:value="queryItems.enable" size="medium" :unchecked-value="false" :checked-value="true" :default-value="true" >
+          <template #checked>
+            启用
+          </template>
+          <template #unchecked>
+            禁用
+          </template>
+        </NSwitch>
       </MeQueryItem>
     </MeCrud>
 
