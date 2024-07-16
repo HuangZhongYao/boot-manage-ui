@@ -30,8 +30,8 @@
           v-model:value="queryItems.enable"
           clearable
           :options="[
-            { label: '启用', value: 1 },
-            { label: '停用', value: 0 },
+            { label: '启用', value: true },
+            { label: '停用', value: false },
           ]"
         />
       </MeQueryItem>
@@ -81,7 +81,7 @@
           />
         </n-form-item>
         <n-form-item label="状态" path="enable">
-          <NSwitch v-model:value="modalForm.enable">
+          <NSwitch v-model:value="modalForm.enable" :default-value="true" :checked-value="true" :unchecked-value="false">
             <template #checked>
               启用
             </template>
@@ -89,6 +89,9 @@
               停用
             </template>
           </NSwitch>
+        </n-form-item>
+        <n-form-item label="状态" path="enable">
+          <n-input v-model:value="modalForm.remark" type="textarea" maxlength="200" round clearable show-count />
         </n-form-item>
       </n-form>
     </MeModal>
@@ -126,6 +129,7 @@ const { modalRef, modalFormRef, modalAction, modalForm, handleAdd, handleDelete,
 const columns = [
   { title: '角色名', key: 'name' },
   { title: '角色编码', key: 'code' },
+  { title: '创建时间', key: 'createdTime' },
   {
     title: '状态',
     key: 'enable',
@@ -146,6 +150,7 @@ const columns = [
         },
       ),
   },
+  { title: '备注', key: 'remark' },
   {
     title: '操作',
     key: 'actions',
@@ -157,8 +162,8 @@ const columns = [
         h(
           NButton,
           {
-            size: 'small',
-            type: 'primary',
+            size: 'tiny',
+            type: 'info',
             secondary: true,
             onClick: () =>
               router.push({ path: `/pms/role/user/${row.id}`, query: { roleName: row.name } }),
@@ -171,7 +176,7 @@ const columns = [
         h(
           NButton,
           {
-            size: 'small',
+            size: 'tiny',
             type: 'primary',
             style: 'margin-left: 12px;',
             disabled: row.code === 'SUPER_ADMIN',
@@ -186,11 +191,11 @@ const columns = [
         h(
           NButton,
           {
-            size: 'small',
+            size: 'tiny',
             type: 'error',
             style: 'margin-left: 12px;',
             disabled: row.code === 'SUPER_ADMIN',
-            onClick: () => handleDelete(row.id),
+            onClick: () => handleDelete({ ids: [row.id] }),
           },
           {
             default: () => '删除',

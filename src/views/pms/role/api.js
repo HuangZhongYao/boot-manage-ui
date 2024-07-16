@@ -9,10 +9,10 @@
 import { request } from '@/utils'
 
 export default {
-  create: data => request.post('/role', data),
-  read: (params = {}) => request.get('/role/page', { params }),
-  update: data => request.patch(`/role/${data.id}`, data),
-  delete: id => request.delete(`/role/${id}`),
+  create: data => request.post('/role/addRole', data),
+  read: (params = {}) => request.get('/role/pageQueryList', { params }),
+  update: data => request.patch(`/role/editRole`, data),
+  delete: data => request.delete(`/role/`, { data }),
 
   getAllPermissionTree: () => request.get('/permission/tree'),
   getAllUsers: (params = {}) => request.get('/user', { params }),
