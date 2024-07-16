@@ -31,11 +31,11 @@
         />
       </MeQueryItem>
 
-      <MeQueryItem label="性别" :label-width="50">
+      <MeQueryItem label="性别" :label-width="30">
         <n-select v-model:value="queryItems.gender" clearable :options="genders" />
       </MeQueryItem>
 
-      <MeQueryItem label="状态" :label-width="50">
+      <MeQueryItem label="状态" :label-width="30">
         <n-select
           v-model:value="queryItems.enable"
           clearable
@@ -127,8 +127,9 @@ onMounted(() => {
 })
 
 const genders = [
-  { label: '男', value: 1 },
-  { label: '女', value: 2 },
+  { label: '男', value: 'MALE' },
+  { label: '女', value: 'FEMALE' },
+  { label: '保密', value: 'UNKNOWN' },
 ]
 const roles = ref([])
 api.getAllRoles().then(({ data = [] }) => (roles.value = data))
@@ -154,19 +155,20 @@ const {
 const columns = [
   {
     title: '头像',
-    key: 'avatar',
+    key: 'avatarUrl',
     width: 80,
-    render: ({ avatar }) =>
+    render: ({ avatarUrl }) =>
       h(NAvatar, {
         size: 'medium',
-        src: avatar,
+        src: avatarUrl,
       }),
   },
-  { title: '用户名', key: 'username', width: 150, ellipsis: { tooltip: true } },
+  { title: '用户名', key: 'username', width: 130, ellipsis: { tooltip: true } },
+  { title: '账号', key: 'account', width: 130, ellipsis: { tooltip: true } },
   {
     title: '角色',
     key: 'roles',
-    width: 200,
+    width: 60,
     ellipsis: { tooltip: true },
     render: ({ roles }) => {
       if (roles?.length) {
@@ -187,10 +189,19 @@ const columns = [
     width: 80,
     render: ({ gender }) => genders.find(item => gender === item.value)?.label ?? '',
   },
-  { title: '邮箱', key: 'email', width: 150, ellipsis: { tooltip: true } },
+  { title: '手机号', key: 'phone', width: 150, ellipsis: { tooltip: true } },
   {
     title: '创建时间',
-    key: 'createDate',
+    key: 'createdTime',
+    width: 180,
+    render(row) {
+      return h('span', formatDateTime(row.createTime))
+    },
+  },
+  { title: '描述', key: 'remark', width: 150, ellipsis: { tooltip: true } },
+  {
+    title: '最后登录时间',
+    key: 'lastLoginTime',
     width: 180,
     render(row) {
       return h('span', formatDateTime(row.createTime))

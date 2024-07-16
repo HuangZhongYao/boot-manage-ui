@@ -133,17 +133,19 @@ async function handleQuery() {
     if (props.isPagination && props.remote) {
       paginationParams = { pageNo: pagination.page, pageSize: pagination.pageSize }
     }
-    const { data } = await props.getData({
+    const res = await props.getData({
       ...props.queryItems,
       ...paginationParams,
     })
-    tableData.value = data?.pageData || data
-    pagination.itemCount = data.total ?? data.length
+    // 判断使用后端分页还是前端分页
+    tableData.value = res.result?.records || res.result
+    pagination.itemCount = res.result.total ?? res.result.length
     if (pagination.itemCount && !tableData.value.length && pagination.page > 1) {
       // 如果当前页数据为空，且总条数不为0，则返回上一页数据
       onPageChange(pagination.page - 1)
     }
   }
+  // eslint-disable-next-line unused-imports/no-unused-vars
   catch (error) {
     tableData.value = []
     pagination.itemCount = 0
