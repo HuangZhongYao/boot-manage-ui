@@ -144,20 +144,15 @@
           :span="12"
           label="排序"
           path="order"
-          :rule="{
-            type: 'number',
-            required: true,
-            message: '此为必填项',
-            trigger: ['blur', 'change'],
-          }"
         >
           <n-input-number v-model:value="modalForm.order" />
         </n-form-item-gi>
         <n-form-item-gi
           :span="24"
           label="备注"
+          path="description"
         >
-          <n-input type="textarea" v-model:value="modalForm.description" maxlength="200" show-count />
+          <n-input v-model:value="modalForm.description" type="textarea" maxlength="200" show-count />
         </n-form-item-gi>
       </n-grid>
     </n-form>
