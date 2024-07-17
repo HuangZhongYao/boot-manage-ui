@@ -14,7 +14,7 @@ export default {
   update: data => request.patch(`/role/editRole`, data),
   delete: data => request.delete(`/role/`, { data }),
 
-  getAllPermissionTree: () => request.get('/permission/tree'),
+  getAllPermissionTree: () => request.get('/resources/resourcesTree'),
   getAllUsers: (params = {}) => request.get('/user', { params }),
   addRoleUsers: (roleId, data) => request.patch(`/role/users/add/${roleId}`, data),
   removeRoleUsers: (roleId, data) => request.patch(`/role/users/remove/${roleId}`, data),
