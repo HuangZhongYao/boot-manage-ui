@@ -36,6 +36,7 @@
         />
       </MeQueryItem>
     </MeCrud>
+
     <MeModal ref="modalRef" width="520px">
       <n-form
         ref="modalFormRef"
@@ -65,6 +66,10 @@
           }"
         >
           <n-input v-model:value="modalForm.code" :disabled="modalAction !== 'add'" />
+        </n-form-item>
+        <n-form-item label="图标">
+          <i class="i-fe:users text-28 text-gray-600 hover:bg-primary" />
+          <n-input v-model:value="modalForm.icon" value="i-fe:users text-28 text-gray-600 hover:bg-primary"/>
         </n-form-item>
         <n-form-item label="权限" path="permissionIds">
           <n-tree

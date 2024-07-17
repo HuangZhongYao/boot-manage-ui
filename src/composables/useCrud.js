@@ -97,7 +97,6 @@ export function useCrud({ name, initForm = {}, doCreate, doDelete, doUpdate, ref
       async onPositiveClick() {
         try {
           d.loading = true
-          debugger
           const result = await doDelete(data)
           $message.success('删除成功')
           d.loading = false
