@@ -10,10 +10,10 @@ import axios from 'axios'
 import { request } from '@/utils'
 
 export default {
-  getMenuTree: () => request.get('/permission/menu/tree'),
-  getButtons: ({ parentId }) => request.get(`/permission/button/${parentId}`),
+  getMenuTree: () => request.get('/resources/resourcesTree'),
+  getButtons: ({ parentId }) => request.get(`/resources/button/${parentId}`),
   getComponents: () => axios.get(`${import.meta.env.VITE_PUBLIC_PATH}components.json`),
-  addPermission: data => request.post('/permission', data),
-  savePermission: (id, data) => request.patch(`/permission/${id}`, data),
-  deletePermission: id => request.delete(`permission/${id}`),
+  addPermission: data => request.post('/resources/addResources', data),
+  savePermission: (id, data) => request.patch(`/resources/editResources`, data),
+  deletePermission: data => request.delete(`/resources/delResources`, { data }),
 }

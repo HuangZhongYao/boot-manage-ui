@@ -64,6 +64,9 @@
             <n-descriptions-item label="排序">
               {{ currentMenu.order ?? '--' }}
             </n-descriptions-item>
+            <n-descriptions-item label="备注">
+              {{ currentMenu.description ?? '--' }}
+            </n-descriptions-item>
           </n-descriptions>
 
           <div class="mt-32 flex justify-between">
@@ -109,7 +112,7 @@ async function initData(data) {
   }
   treeLoading.value = true
   const res = await api.getMenuTree()
-  treeData.value = res?.data || []
+  treeData.value = res?.result || []
   treeLoading.value = false
 
   if (data)
@@ -225,7 +228,7 @@ function handleDeleteBtn(id) {
     async onPositiveClick() {
       try {
         d.loading = true
-        await api.deletePermission(id)
+        await api.deletePermission({ ids: [id] })
         $message.success('删除成功')
         $table.value.handleSearch()
         d.loading = false

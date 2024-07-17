@@ -153,6 +153,12 @@
         >
           <n-input-number v-model:value="modalForm.order" />
         </n-form-item-gi>
+        <n-form-item-gi
+          :span="24"
+          label="备注"
+        >
+          <n-input type="textarea" v-model:value="modalForm.description" maxlength="200" show-count />
+        </n-form-item-gi>
       </n-grid>
     </n-form>
   </MeModal>
