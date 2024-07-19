@@ -1,18 +1,33 @@
-/**********************************
- * @Author: Ronnie Zhang
- * @LastEditor: Ronnie Zhang
- * @LastEditTime: 2023/12/13 20:54:36
- * @Email: zclzone@outlook.com
- * Copyright © 2023 Ronnie Zhang(大脸怪) | https://isme.top
- **********************************/
-
+/**
+ * 默认的布局样式。 empty|full|normal|simple
+ * @constant defaultLayout
+ * @type {string}
+ * @default 'normal'
+ */
 export const defaultLayout = 'normal'
 
+/**
+ * 默认的主题颜色。
+ * @constant defaultPrimaryColor
+ * @type {string}
+ * @default '#316C72'
+ */
 export const defaultPrimaryColor = '#316C72'
 
+/**
+ * 控制布局设置组件的可见性。
+ * @constant layoutSettingVisible
+ * @type {boolean}
+ * @default true
+ */
 // 控制 LayoutSetting 组件是否可见
 export const layoutSettingVisible = true
 
+/**
+ * 提供Naive UI主题的自定义覆盖配置。
+ * @constant naiveThemeOverrides
+ * @type {object}
+ */
 export const naiveThemeOverrides = {
   common: {
     primaryColor: '#316C72FF',
@@ -22,6 +37,12 @@ export const naiveThemeOverrides = {
   },
 }
 
+/**
+ * 定义基础权限列表。
+ * 每个权限项包含代码、名称、类型、图标等信息，以及子权限列表。
+ * @constant basePermissions
+ * @type {array}
+ */
 export const basePermissions = [
   {
     code: 'ExternalLink',

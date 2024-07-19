@@ -1,6 +1,14 @@
 import { basePermissions } from '@/settings'
 import api from '@/api'
 
+/**
+ * 异步获取用户信息。
+ *
+ * 该函数通过调用API获取当前用户的信息，包括基础信息、角色和权限。
+ * 返回一个包含用户详细信息的对象，这些信息可用于用户界面的展示和权限控制。
+ *
+ * @returns {Promise<object>} 包含用户信息的对象，包括ID、用户名、账户、头像、昵称、性别、地址、最后登录时间、电子邮件、电话、角色、权限和当前角色。
+ */
 export async function getUserInfo() {
   const res = await api.getUser()
   const { id, roles, permissions, currentRole } = res.result || {}
@@ -21,6 +29,14 @@ export async function getUserInfo() {
   }
 }
 
+/**
+ * 异步获取用户的全部权限。
+ *
+ * 该函数首先尝试从API获取用户的动态权限，然后将这些权限与预定义的基础权限合并。
+ * 返回一个包含所有权限的数组，这些权限可用于权限检查和界面展示。
+ *
+ * @returns {Promise<Array<string>>} 包含所有权限的数组。
+ */
 export async function getPermissions() {
   let asyncPermissions = []
   try {
