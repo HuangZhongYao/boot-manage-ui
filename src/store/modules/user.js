@@ -19,6 +19,12 @@ export const useUserStore = defineStore('user', {
     username() {
       return this.userInfo?.username
     },
+    account() {
+      return this.userInfo?.account
+    },
+    phone() {
+      return this.userInfo?.phone
+    },
     nickName() {
       return this.userInfo?.nickName
     },

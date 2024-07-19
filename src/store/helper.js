@@ -6,7 +6,8 @@ export async function getUserInfo() {
   const { id, roles, permissions, currentRole } = res.result || {}
   return {
     id,
-    username: res.result.account,
+    username: res.result.username,
+    account: res.result.account,
     avatar: res.result?.avatarUrl,
     nickName: res.result?.username,
     gender: res.result?.gender,
