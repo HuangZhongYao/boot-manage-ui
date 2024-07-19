@@ -101,6 +101,8 @@ import ResAddOrEdit from './components/ResAddOrEdit.vue'
 import api from './api'
 import { MeCrud } from '@/components'
 
+defineOptions({ name: 'ResourceMgt' })
+
 const treeData = ref([])
 const treeLoading = ref(false)
 const $table = ref(null)

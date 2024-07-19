@@ -32,6 +32,11 @@ import { layoutSettingVisible } from './settings'
 import { LayoutSetting } from '@/components'
 import { useAppStore, useTabStore } from '@/store'
 
+/**
+ * 使用Map缓存布局组件，以避免重复加载。
+ * @param {string} name - 布局的名称。
+ * @returns {Object} - 对应布局的Vue组件。
+ */
 const layouts = new Map()
 function getLayout(name) {
   // 利用map将加载过的layout缓存起来，防止重新加载layout导致页面闪烁
@@ -44,19 +49,32 @@ function getLayout(name) {
 
 const route = useRoute()
 const appStore = useAppStore()
+/**
+ * 根据应用商店中的布局设置，初始化布局。
+ */
 if (appStore.layout === 'default')
   appStore.setLayout('')
 const Layout = computed(() => {
+  /**
+   * 根据当前路由和应用商店中的布局设置，决定使用的布局组件。
+   * 如果当前路由没有匹配的布局，返回null。
+   */
   if (!route.matched?.length)
     return null
   return getLayout(route.meta?.layout || appStore.layout)
 })
 
 const tabStore = useTabStore()
+/**
+ * 计算需要进行缓存的标签页名称列表。
+ */
 const keepAliveNames = computed(() => {
   return tabStore.tabs.filter(item => item.keepAlive).map(item => item.name)
 })
 
+/**
+ * 监视应用商店中的主题设置，并更新主题颜色。
+ */
 watchEffect(() => {
   appStore.setThemeColor(appStore.primaryColor, appStore.isDark)
 })
