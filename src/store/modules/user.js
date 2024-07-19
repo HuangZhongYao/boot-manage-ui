@@ -31,6 +31,9 @@ export const useUserStore = defineStore('user', {
     avatar() {
       return this.userInfo?.avatar
     },
+    lastLoginTime() {
+      return this.userInfo?.lastLoginTime
+    },
     currentRole() {
       return this.userInfo?.currentRole || {}
     },

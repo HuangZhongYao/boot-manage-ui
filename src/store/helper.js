@@ -12,6 +12,7 @@ export async function getUserInfo() {
     nickName: res.result?.username,
     gender: res.result?.gender,
     address: res.result?.address,
+    lastLoginTime: res.result?.lastLoginTime,
     email: res.result?.phone,
     phone: res.result?.phone,
     roles,

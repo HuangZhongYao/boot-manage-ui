@@ -34,7 +34,7 @@
 
     <n-card class="mt-20" title="个人资料信息">
       <template #header-extra>
-        <n-button type="primary" text @click="profileModalRef.open()">
+        <n-button type="primary" text @click="editProfileFlag = true">
           <i class="i-fe:edit mr-4" />
           修改资料
         </n-button>
@@ -46,17 +46,20 @@
         :column="1"
         bordered
       >
-        <n-descriptions-item label="昵称">
-          {{ userStore.nickName }}
+        <n-descriptions-item label="登录账号">
+          {{ userStore.account }}
+        </n-descriptions-item>
+        <n-descriptions-item label="用户名">
+          {{ userStore.username }}
         </n-descriptions-item>
         <n-descriptions-item label="性别">
           {{ genders.find((item) => item.value === userStore.userInfo?.gender)?.label ?? '未知' }}
         </n-descriptions-item>
-        <n-descriptions-item label="地址">
-          {{ userStore.userInfo?.address }}
+        <n-descriptions-item label="电话">
+          {{ userStore.userInfo?.phone }}
         </n-descriptions-item>
-        <n-descriptions-item label="邮箱">
-          {{ userStore.userInfo?.email }}
+        <n-descriptions-item label="最后登录时间">
+          {{ userStore.userInfo?.lastLoginTime }}
         </n-descriptions-item>
       </n-descriptions>
     </n-card>
@@ -81,26 +84,36 @@
       </n-form>
     </MeModal>
 
-    <MeModal ref="profileModalRef" title="修改资料" width="420px" @ok="handleProfileSave()">
-      <n-form ref="profileFormRef" :model="profileForm" label-placement="left">
-        <n-form-item label="昵称" path="nickName">
-          <n-input v-model:value="profileForm.nickName" placeholder="请输入昵称" />
-        </n-form-item>
-        <n-form-item label="性别" path="gender">
-          <n-select
-            v-model:value="profileForm.gender"
-            :options="genders"
-            placeholder="请选择性别"
-          />
-        </n-form-item>
-        <n-form-item label="地址" path="address">
-          <n-input v-model:value="profileForm.address" placeholder="请输入地址" />
-        </n-form-item>
-        <n-form-item label="邮箱" path="email">
-          <n-input v-model:value="profileForm.email" placeholder="请输入邮箱" />
-        </n-form-item>
-      </n-form>
-    </MeModal>
+    <n-drawer v-model:show="editProfileFlag" :width="502">
+      <n-drawer-content title="修改信息">
+        <n-form ref="profileFormRef" :model="profileForm" label-placement="left">
+          <n-form-item label="用户名" path="username">
+            <n-input v-model:value="profileForm.username" placeholder="请输入用户名" />
+          </n-form-item>
+          <n-form-item label="性别" path="gender">
+            <n-select
+              v-model:value="profileForm.gender"
+              :options="genders"
+              placeholder="请选择性别"
+            />
+          </n-form-item>
+          <n-form-item label="地址" path="address">
+            <n-input v-model:value="profileForm.address" placeholder="请输入地址" />
+          </n-form-item>
+          <n-form-item label="电话" path="phone">
+            <n-input v-model:value="profileForm.phone" placeholder="请输入电话" />
+          </n-form-item>
+        </n-form>
+        <template #footer>
+          <n-button @click="editProfileFlag = false">
+            取消
+          </n-button>
+          <n-button type="primary" class="ml-20" @click="handleProfileSave">
+            保存
+          </n-button>
+        </template>
+      </n-drawer-content>
+    </n-drawer>
   </AppPage>
 </template>
 
@@ -123,9 +136,10 @@ const [pwdFormRef, pwdForm, pwdValidation] = useForm()
 
 async function handlePwdSave() {
   await pwdValidation()
+  pwdForm.value.id = userStore.userId
   await api.changePassword(pwdForm.value)
   $message.success('密码修改成功')
-  refreshUserInfo()
+  await refreshUserInfo()
 }
 
 const newAvatar = ref(userStore.avatar)
@@ -135,7 +149,7 @@ async function handleAvatarSave() {
     $message.error('请输入头像地址')
     return false
   }
-  await api.updateProfile({ id: userStore.userId, avatar: newAvatar.value })
+  await api.updateProfile({ id: userStore.userId, avatarUrl: newAvatar.value })
   $message.success('头像修改成功')
   refreshUserInfo()
 }
@@ -145,19 +159,24 @@ const genders = [
   { label: '男', value: 'MALE' },
   { label: '女', value: 'FEMALE' },
 ]
-const [profileModalRef] = useModal()
+
 const [profileFormRef, profileForm, profileValidation] = useForm({
   id: userStore.userId,
   nickName: userStore.nickName,
+  username: userStore.username,
   gender: userStore.userInfo?.gender ?? 0,
   address: userStore.userInfo?.address,
   email: userStore.userInfo?.email,
+  phone: userStore.userInfo?.phone,
 })
+
+const editProfileFlag = ref(false)
+
 async function handleProfileSave() {
   await profileValidation()
   await api.updateProfile(profileForm.value)
   $message.success('资料修改成功')
-  refreshUserInfo()
+  await refreshUserInfo()
 }
 
 async function refreshUserInfo() {
