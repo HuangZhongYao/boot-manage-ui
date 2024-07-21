@@ -100,26 +100,101 @@
         </n-form-item>
       </n-form>
     </MeModal>
+    <n-modal style="width: 800px" v-model:show="selectUser"
+             title="分配用户"
+             preset="dialog"
+             :mask-closable="false"
+             content="你确认"
+             positive-text="确认"
+             negative-text="算了">
+      <n-transfer
+        v-model:value="selectedUser"
+        :options="selectUserOptions"
+        source-filterable
+        :render-target-label="renderLabel"
+      />
+    </n-modal>
   </CommonPage>
 </template>
 
 <script setup>
-import { NButton, NSwitch } from 'naive-ui'
+import { NAvatar, NButton, NSwitch } from 'naive-ui'
+import { ref } from 'vue'
 import api from './api'
 import { MeCrud, MeModal, MeQueryItem } from '@/components'
 import { useCrud } from '@/composables'
 
 defineOptions({ name: 'RoleMgt' })
 
-const router = useRouter()
-
 const $table = ref(null)
 /** QueryBar筛选参数（可选） */
 const queryItems = ref({})
 
+// 选择用户 用户选项数组
+let selectUserOptions = []
+
+// 页码挂载函数
 onMounted(() => {
   $table.value?.handleSearch()
+  // 初始化获取用户,用于分配用户时
+  api.getAllUsers().then(({ result = [] }) => {
+    selectUserOptions = result.map(item => (
+      {
+        value: item.id,
+        label: `${item.username} (${item.account})`,
+        avatarUrl: item.avatarUrl,
+      }
+    ))
+  })
 })
+
+// 控制分配用户模态框显示变量
+const selectUser = ref(false)
+// 已选择用户数组
+let selectedUser = reactive([])
+// 点击分配用户触发方法
+function handelSelectUser(row) {
+  // 显示模态框
+  selectUser.value = !selectUser.value
+  // 回显穿梭框
+  api.queryRoleUser(row.id).then(({ result = [] }) => {
+    selectedUser = result.map(item => item.id)
+  })
+}
+
+// 选择用户穿梭框自定义标签
+const renderLabel = function ({ option }) {
+  return h(
+    'div',
+    {
+      style: {
+        display: 'flex',
+        margin: '6px 0',
+      },
+    },
+    {
+      default: () => [
+        h(NAvatar, {
+          round: true,
+          src: option.avatarUrl,
+          size: 'small',
+          fallbackSrc: 'https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg',
+        }),
+        h(
+          'div',
+          {
+            style: {
+              display: 'flex',
+              marginLeft: '6px',
+              alignSelf: 'center',
+            },
+          },
+          { default: () => option.label },
+        ),
+      ],
+    },
+  )
+}
 
 const { modalRef, modalFormRef, modalAction, modalForm, handleAdd, handleDelete, handleEdit }
   = useCrud({
@@ -170,8 +245,7 @@ const columns = [
             size: 'tiny',
             type: 'info',
             secondary: true,
-            onClick: () =>
-              router.push({ path: `/pms/role/user/${row.id}`, query: { roleName: row.name } }),
+            onClick: () => handelSelectUser(row),
           },
           {
             default: () => '分配用户',

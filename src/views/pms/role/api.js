@@ -13,9 +13,12 @@ export default {
   read: (params = {}) => request.get('/role/pageQueryList', { params }),
   update: data => request.patch(`/role/editRole`, data),
   delete: data => request.delete(`/role/delRole`, { data }),
-
+  // 查询角色下的用户
+  queryRoleUser: roleId => request.get(`/role/queryRoleUserList?id=${roleId}`),
+  setRoleUser: data => request.post('/role/setRoleUser', data),
+  // 查询全部用户
+  getAllUsers: () => request.get('/user/queryAllUserList'),
   getAllPermissionTree: () => request.get('/resources/resourcesTree'),
-  getAllUsers: (params = {}) => request.get('/user', { params }),
   addRoleUsers: (roleId, data) => request.patch(`/role/users/add/${roleId}`, data),
   removeRoleUsers: (roleId, data) => request.patch(`/role/users/remove/${roleId}`, data),
 }
