@@ -181,7 +181,7 @@ const columns = [
   {
     title: '角色',
     key: 'roles',
-    width: 60,
+    width: 100,
     ellipsis: { tooltip: true },
     render: ({ roles }) => {
       if (roles?.length) {
