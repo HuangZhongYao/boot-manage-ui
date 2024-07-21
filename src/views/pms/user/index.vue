@@ -308,8 +308,7 @@ async function handleEnable(row) {
 }
 
 function handleOpenRolesSet(row) {
-  // const roleIds = row.roles.map(item => item.id)
-  const roleIds = []
+  const roleIds = row.roles.map(item => item.id)
   handleOpen({
     action: 'setRole',
     title: '分配角色',
