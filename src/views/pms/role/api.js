@@ -15,6 +15,7 @@ export default {
   delete: data => request.delete(`/role/delRole`, { data }),
   // 查询角色下的用户
   queryRoleUser: roleId => request.get(`/role/queryRoleUserList?id=${roleId}`),
+  // 分配角色的用户接口
   setRoleUser: data => request.post('/role/setRoleUser', data),
   // 查询全部用户
   getAllUsers: () => request.get('/user/queryAllUserList'),
