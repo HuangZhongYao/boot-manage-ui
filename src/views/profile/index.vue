@@ -49,7 +49,7 @@
         <n-descriptions-item label="登录账号">
           {{ userStore.account }}
         </n-descriptions-item>
-        <n-descriptions-item label="用户名">
+        <n-descriptions-item label="昵称">
           {{ userStore.username }}
         </n-descriptions-item>
         <n-descriptions-item label="性别">
@@ -59,7 +59,10 @@
           {{ userStore.userInfo?.phone }}
         </n-descriptions-item>
         <n-descriptions-item label="最后登录时间">
-          {{ userStore.userInfo?.lastLoginTime }}
+          {{ formatDateTime(userStore.userInfo?.lastLoginTime) }}
+        </n-descriptions-item>
+        <n-descriptions-item label="备注">
+          {{ userStore.userInfo?.remark }}
         </n-descriptions-item>
       </n-descriptions>
     </n-card>
@@ -87,21 +90,29 @@
     <n-drawer v-model:show="editProfileFlag" :width="502">
       <n-drawer-content title="修改信息">
         <n-form ref="profileFormRef" :model="profileForm" label-placement="left">
-          <n-form-item label="用户名" path="username">
+          <n-form-item label="账号">
+            <QuestionLabel label="" content="登录用户名不可更改" />
+            <n-input :value="profileForm.username" disabled />
+          </n-form-item>
+          <n-form-item label="昵称" path="username">
+            <QuestionLabel label="" content="用户名也是昵称" />
             <n-input v-model:value="profileForm.username" placeholder="请输入用户名" />
           </n-form-item>
           <n-form-item label="性别" path="gender">
+            <QuestionLabel label="" content="请选择性别" />
             <n-select
               v-model:value="profileForm.gender"
               :options="genders"
               placeholder="请选择性别"
             />
           </n-form-item>
-          <n-form-item label="地址" path="address">
-            <n-input v-model:value="profileForm.address" placeholder="请输入地址" />
-          </n-form-item>
           <n-form-item label="电话" path="phone">
+            <QuestionLabel label="" content="请输入电话" />
             <n-input v-model:value="profileForm.phone" placeholder="请输入电话" />
+          </n-form-item>
+          <n-form-item label="备注" path="remark">
+            <QuestionLabel label="" content="请输入地址" />
+            <n-input v-model:value="profileForm.remark" type="textarea" maxlength="230" placeholder="备注" show-count />
           </n-form-item>
         </n-form>
         <template #footer>
@@ -123,6 +134,8 @@ import { MeModal } from '@/components'
 import { useForm, useModal } from '@/composables'
 import { useUserStore } from '@/store'
 import { getUserInfo } from '@/store/helper'
+import { formatDateTime } from '@/utils/common.js'
+import QuestionLabel from '@/views/pms/resource/components/QuestionLabel.vue'
 
 const userStore = useUserStore()
 const required = {

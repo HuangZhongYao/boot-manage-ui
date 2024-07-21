@@ -1,4 +1,5 @@
 /**********************************
+ * 公用工具api
  * @FilePath: common.js
  * @Author: Ronnie Zhang
  * @LastEditor: Ronnie Zhang
@@ -10,6 +11,7 @@
 import dayjs from 'dayjs'
 
 /**
+ * 日期时间格式化函数 默认格式化YYYY-MM-DD HH:mm:ss
  * @param {(object | string | number)} time
  * @param {string} format
  * @returns {string | null} 格式化后的时间字符串
@@ -19,6 +21,12 @@ export function formatDateTime(time = undefined, format = 'YYYY-MM-DD HH:mm:ss')
   return dayjs(time).format(format)
 }
 
+/**
+ * 日期格式化函数 默认格式化YYYY-MM-DD
+ * @param date
+ * @param format
+ * @returns {string|null}
+ */
 export function formatDate(date = undefined, format = 'YYYY-MM-DD') {
   return formatDateTime(date, format)
 }

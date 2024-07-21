@@ -24,7 +24,7 @@ export const useUserStore = defineStore('user', {
   getters: {
     /**
      * 获取用户的ID。
-     * @returns {Number|null} 返回用户的ID，如果userInfo为null，则返回null。
+     * @returns {number | null} 返回用户的ID，如果userInfo为null，则返回null。
      */
     userId() {
       return this.userInfo?.id
@@ -70,6 +70,13 @@ export const useUserStore = defineStore('user', {
      */
     lastLoginTime() {
       return this.userInfo?.lastLoginTime
+    },
+    /**
+     * 获取用户备注信息
+     * @returns {function(): *}
+     */
+    remark() {
+      return this.userInfo?.remark
     },
     /**
      * 获取用户当前的角色信息。

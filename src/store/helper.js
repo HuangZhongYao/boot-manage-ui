@@ -23,6 +23,7 @@ export async function getUserInfo() {
     lastLoginTime: res.result?.lastLoginTime,
     email: res.result?.phone,
     phone: res.result?.phone,
+    remark: res.result?.remark,
     roles,
     permissions,
     currentRole,
