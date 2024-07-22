@@ -199,8 +199,15 @@ function cancelSelectUser() {
  * 保存分配用户
  */
 function saveSelectUser() {
-  api.setRoleUser({ roleId: selectUserModal.value.row.id, userIds: selectedUser })
-  $message.success('操作成功')
+  api.setRoleUser({ roleId: selectUserModal.value.row.id, userIds: selectedUser.value })
+    .then((res) => {
+      if (res.result) {
+        $message.success('操作成功')
+      }
+      else {
+        $message.warning(res.message)
+      }
+    })
 }
 
 // 选择用户穿梭框自定义标签
