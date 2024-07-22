@@ -188,7 +188,7 @@ const columns = [
         return roles.map((item, index) =>
           h(
             NTag,
-            { type: 'success', style: index > 0 ? 'margin-left: 8px;' : '' },
+            { type: 'success', round: true, size: 'small', bordered: false, style: index > 0 ? 'margin-left: 8px;' : '' },
             { default: () => item.name },
           ),
         )
