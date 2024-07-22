@@ -9,7 +9,7 @@
 <template>
   <CommonPage>
     <template #action>
-      <NButton type="primary" size="small"  @click="handleAdd()">
+      <NButton type="primary" size="small" @click="handleAdd()">
         <i class="i-material-symbols:add mr-4 text-18" />
         新增角色
       </NButton>
@@ -67,9 +67,8 @@
         >
           <n-input v-model:value="modalForm.code" :disabled="modalAction !== 'add'" />
         </n-form-item>
-        <n-form-item label="图标">
-          <i class="i-fe:users text-28 text-gray-600 hover:bg-primary" />
-          <n-input v-model:value="modalForm.icon" value="i-fe:users text-28 text-gray-600 hover:bg-primary" />
+        <n-form-item label="角色图标" path="icon">
+          <n-select v-model:value="modalForm.icon" :default-value="modalForm.icon ? modalForm.icon : modalForm.icon = `i-me:role`" :options="iconOptions" clearable filterable />
         </n-form-item>
         <n-form-item label="权限" path="permissionIds">
           <n-tree
@@ -129,6 +128,7 @@
 <script setup>
 import { NAvatar, NButton, NSwitch } from 'naive-ui'
 import { ref } from 'vue'
+import icons from 'isme:icons'
 import api from './api'
 import { MeCrud, MeModal, MeQueryItem } from '@/components'
 import { useCrud } from '@/composables'
@@ -145,6 +145,12 @@ let selectUserOptions = []
 onMounted(() => {
   $table.value?.handleSearch()
 })
+
+const iconOptions = icons.map(item => ({
+  label: () =>
+    h('span', { class: 'flex items-center' }, [h('i', { class: `${item} text-18 mr-8` }), item]),
+  value: item,
+}))
 
 /**
  * 获取用户
@@ -258,6 +264,17 @@ const { modalRef, modalFormRef, modalAction, modalForm, handleAdd, handleDelete,
   })
 
 const columns = [
+  {
+    title: '图标',
+    key: 'icon',
+    render: ({ icon }) =>
+      h(
+        'i',
+        {
+          class: icon,
+        },
+      ),
+  },
   { title: '角色名', key: 'name' },
   { title: '角色编码', key: 'code' },
   { title: '创建时间', key: 'createdTime' },
