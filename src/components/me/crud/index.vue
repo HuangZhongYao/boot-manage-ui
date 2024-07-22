@@ -113,8 +113,19 @@ const tableData = ref([])
 const pagination = reactive({
   page: 1,
   pageSize: 10,
+  pageSizes: [5, 10, 20, 30, 40, 50, 100],
+  showSizePicker: true,
+  showQuickJumper: true,
+  displayOrder: ['pages', 'quick-jumper', 'size-picker'],
   prefix({ itemCount }) {
     return `共 ${itemCount} 条数据`
+  },
+  onChange: (page) => {
+    pagination.page = page
+  },
+  onUpdatePageSize: (pageSize) => {
+    pagination.pageSize = pageSize
+    handleSearch()
   },
 })
 
