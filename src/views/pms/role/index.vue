@@ -9,7 +9,7 @@
 <template>
   <CommonPage>
     <template #action>
-      <NButton type="primary" @click="handleAdd()">
+      <NButton type="primary" size="small"  @click="handleAdd()">
         <i class="i-material-symbols:add mr-4 text-18" />
         新增角色
       </NButton>

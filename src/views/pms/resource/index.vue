@@ -24,7 +24,7 @@
             <h3 class="mb-12">
               {{ currentMenu.name }}
             </h3>
-            <NButton size="small" type="primary" @click="handleEdit(currentMenu)">
+            <NButton size="tiny" type="primary" @click="handleEdit(currentMenu)">
               <i class="i-material-symbols:edit-outline mr-4 text-14" />
               编辑
             </NButton>
