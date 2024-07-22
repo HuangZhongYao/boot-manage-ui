@@ -132,6 +132,7 @@ import icons from 'isme:icons'
 import api from './api'
 import { MeCrud, MeModal, MeQueryItem } from '@/components'
 import { useCrud } from '@/composables'
+import {formatDateTime} from "@/utils/index.js";
 
 defineOptions({ name: 'RoleMgt' })
 
@@ -277,7 +278,13 @@ const columns = [
   },
   { title: '角色名', key: 'name' },
   { title: '角色编码', key: 'code' },
-  { title: '创建时间', key: 'createdTime' },
+  {
+    title: '创建时间',
+    key: 'createdTime',
+    render(row) {
+      return h('span', formatDateTime(row.createTime))
+    },
+  },
   {
     title: '状态',
     key: 'enable',
@@ -331,7 +338,7 @@ const columns = [
           },
           {
             default: () => '编辑',
-            icon: () => h('i', { class: 'i-material-symbols:edit-outline text-14' }),
+            icon: () => h('i', { class: 'i-me:edit text-14' }),
           },
         ),
 
