@@ -99,6 +99,77 @@
         </n-form-item>
       </n-form>
     </MeModal>
+    <n-drawer v-model:show="showEditRoleFlag" :width="502">
+      <n-drawer-content>
+        <template #header>
+          编辑{{ editRoleForm.name }}角色
+        </template>
+        <n-form
+          ref="editRoleRef"
+          label-placement="left"
+          label-align="left"
+          :label-width="80"
+          :model="editRoleForm"
+        >
+          <n-form-item
+            label="角色名"
+            path="name"
+            :rule="{
+              required: true,
+              message: '请输入角色名',
+              trigger: ['input', 'blur'],
+            }"
+          >
+            <n-input v-model:value="editRoleForm.name" />
+          </n-form-item>
+          <n-form-item
+            label="角色编码"
+            path="code"
+            :rule="{
+              required: true,
+              message: '请输入角色编码',
+              trigger: ['input', 'blur'],
+            }"
+          >
+            <n-input v-model:value="editRoleForm.code" :disabled="modalAction !== 'add'" />
+          </n-form-item>
+          <n-form-item label="角色图标" path="icon">
+            <n-select v-model:value="editRoleForm.icon" :default-value="editRoleForm.icon ? editRoleForm.icon : editRoleForm.icon = `i-me:role`" :options="iconOptions" clearable filterable />
+          </n-form-item>
+          <n-form-item label="权限" path="permissionIds">
+            <n-tree
+              key-field="id"
+              label-field="name"
+              :selectable="false"
+              :data="permissionTree"
+              :checked-keys="editRoleForm.permissionIds"
+              :on-update:checked-keys="(keys) => (editRoleForm.permissionIds = keys)"
+              checkable
+              check-on-click
+              default-expand-all
+              class="cus-scroll max-h-200 w-full"
+            />
+          </n-form-item>
+          <n-form-item label="状态" path="enable">
+            <NSwitch v-model:value="editRoleForm.enable" :default-value="true" :checked-value="true" :unchecked-value="false">
+              <template #checked>
+                启用
+              </template>
+              <template #unchecked>
+                停用
+              </template>
+            </NSwitch>
+          </n-form-item>
+          <n-form-item label="状态" path="remark">
+            <n-input v-model:value="editRoleForm.remark" type="textarea" maxlength="200" round clearable show-count />
+          </n-form-item>
+        </n-form>
+        <template #footer>
+          <NButton @click="cancelEditRole">取消</NButton>
+          <NButton :loading="showEditRoleSubmitFlag" type="primary" class="ml-20" @click="saveEditRole">保存</NButton>
+        </template>
+      </n-drawer-content>
+    </n-drawer>
     <n-modal
       ref="selectUserModal"
       v-model:show="selectUserFlag"
@@ -132,7 +203,7 @@ import icons from 'isme:icons'
 import api from './api'
 import { MeCrud, MeModal, MeQueryItem } from '@/components'
 import { useCrud } from '@/composables'
-import {formatDateTime} from "@/utils/index.js";
+import { formatDateTime } from '@/utils/index.js'
 
 defineOptions({ name: 'RoleMgt' })
 
@@ -152,6 +223,59 @@ const iconOptions = icons.map(item => ({
     h('span', { class: 'flex items-center' }, [h('i', { class: `${item} text-18 mr-8` }), item]),
   value: item,
 }))
+
+// 定义变量控制编辑角色抽屉显示
+const showEditRoleFlag = ref(false)
+const showEditRoleSubmitFlag = ref(false)
+const editRoleRef = ref(null)
+const editRoleForm = ref({ rules: {
+  code: {
+    required: true,
+    message: '请输入角色编码',
+    trigger: ['input', 'blur'],
+  },
+  name: {
+    required: true,
+    message: '请输入角色名',
+    trigger: ['input', 'blur'],
+  },
+} })
+
+/**
+ * 点击编辑角色
+ * @param row角色数据
+ */
+function handelEditRole(row) {
+  // eslint-disable-next-line no-use-before-define
+  editRoleForm.value = JSON.parse(JSON.stringify(row))
+  showEditRoleFlag.value = true
+}
+
+/**
+ * 保存编辑角色
+ */
+function saveEditRole() {
+  editRoleRef.value.validate()
+  showEditRoleSubmitFlag.value = true
+  api.update(editRoleForm.value).then((res) => {
+    if (res.result) {
+      showEditRoleFlag.value = false
+      $message.success('操作成功')
+    }
+    else {
+      $message.warning(res.message)
+    }
+    showEditRoleSubmitFlag.value = false
+    $table.value?.handleSearch()
+  })
+}
+
+/**
+ * 取消编辑角色
+ */
+function cancelEditRole() {
+  showEditRoleFlag.value = false
+}
 
 /**
  * 获取用户
@@ -334,7 +458,7 @@ const columns = [
             type: 'primary',
             style: 'margin-left: 12px;',
             disabled: row.code === 'SUPER_ADMIN',
-            onClick: () => handleEdit(row),
+            onClick: () => handelEditRole(row),
           },
           {
             default: () => '编辑',
