@@ -108,7 +108,8 @@
       preset="dialog"
       :mask-closable="false"
       close-on-esc
-      content="你确认"
+      type="success"
+      :loading="!selectUserFlag"
       positive-text="保存"
       negative-text="取消"
       @positive-click="saveSelectUser"
@@ -160,7 +161,7 @@ function getAllUsers() {
     ))
   })
 }
-
+// 分配用户模态框
 const selectUserModal = ref(null)
 // 控制分配用户模态框显示变量
 const selectUserFlag = ref(false)
@@ -193,6 +194,8 @@ function cancelSelectUser() {
   selectedUser.value.length = 0
   // 清空row
   selectUserModal.value.row = null
+  // 关闭
+  selectUserFlag.value = false
 }
 
 /**
