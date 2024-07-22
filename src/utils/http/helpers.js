@@ -53,9 +53,9 @@ export function resolveResError(code, message, needTip = true) {
     case 404:
       message = '请求资源或接口不存在'
       break
-    // 处理服务器发生异常的错误
+    // 处理用户友好异常的错误
     case 500:
-      message = '服务器发生异常'
+      message = `操作错误: ${message}`
       break
     // 处理未知错误
     default:
@@ -66,4 +66,3 @@ export function resolveResError(code, message, needTip = true) {
   needTip && window.$message?.error(message)
   return message
 }
-
