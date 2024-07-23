@@ -26,8 +26,7 @@ export function resolveResError(code, message, needTip = true) {
       message = `表单未填写完: ${message}`
       break
     // 处理登录过期的错误，需要用户确认是否重新登录
-    case 11007:
-    case 11008:
+    case 401:
       if (isConfirming || !needTip)
         return
       isConfirming = true
