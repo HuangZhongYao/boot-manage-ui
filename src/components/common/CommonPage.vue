@@ -37,7 +37,7 @@
         </template>
       </AppCard>
       <transition name="fade-slide" mode="out-in" appear>
-        <AppCard class="cus-scroll m-10 h-0 flex-1 rounded-8 p-24" bordered>
+        <AppCard class="cus-scroll m-4 h-0 flex-1 rounded-8 p-14" bordered>
           <slot />
         </AppCard>
       </transition>
