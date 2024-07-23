@@ -119,6 +119,31 @@
         详细信息需由用户本人补充修改
       </n-alert>
     </MeModal>
+
+    <n-modal
+      ref="selectRoleModal"
+      v-model:show="selectRoleFlag"
+      style="width: 800px"
+      :title="selectRoleModalTitle"
+      preset="dialog"
+      :mask-closable="false"
+      close-on-esc
+      type="success"
+      :loading="!selectRoleFlag"
+      positive-text="保存"
+      negative-text="取消"
+      @positive-click="saveSelectRole"
+      @negative-click="cancelSelectRole"
+      @on-after-leave="cancelSelectRole"
+    >
+      <n-transfer
+        v-model:value="selectedRole"
+        :options="selectRoleOptions"
+        :render-source-label="renderLabel"
+        :render-target-label="renderLabel"
+        source-filterable
+      />
+    </n-modal>
   </CommonPage>
 </template>
 
@@ -138,6 +163,113 @@ const queryItems = ref({})
 onMounted(() => {
   $table.value?.handleSearch()
 })
+
+// 分配角色模态框
+const selectRoleModal = ref(null)
+// 分配角色模态框标题
+let selectRoleModalTitle
+// 控制分配角色模态框显示变量
+const selectRoleFlag = ref(false)
+// 已选择角色数组
+const selectedRole = ref([])
+// 选择角色 角色选项数组
+let selectRoleOptions = []
+
+/**
+ * 点击分配用户按钮触发方法
+ * @param row
+ */
+function handelSelectRole(row) {
+  // 获取用户
+  getAllRoles()
+  // 回显穿梭框
+  api.getUserRole(row.id).then(({ result = [] }) => {
+    // 清空
+    selectedRole.value.length = 0
+    selectedRole.value.push(...result.map(item => item.id))
+  })
+  selectRoleModalTitle = `${row.username}分配角色`
+  // 给模态框传递一个自定数据
+  selectRoleModal.value.row = row
+  // 显示模态框
+  selectRoleFlag.value = true
+}
+
+/**
+ * 获取用户
+ */
+function getAllRoles() {
+  // 获取用户,用于分配用户时
+  api.getAllRoles().then(({ result = [] }) => {
+    selectRoleOptions = result.map(item => (
+      {
+        value: item.id,
+        label: item.name,
+        icon: item.icon,
+        code: item.code,
+        disabled: !item.enable,
+      }
+    ))
+  })
+}
+
+/**
+ * 保存分配角色
+ */
+function saveSelectRole() {
+  api.setRole({ userId: selectRoleModal.value.row.id, roleIds: selectedRole.value })
+    .then((res) => {
+      if (res.result) {
+        $message.success('操作成功')
+      }
+      else {
+        $message.warning(res.message)
+      }
+    })
+}
+
+/**
+ * 取消分配角色
+ */
+function cancelSelectRole() {
+  // 清空已选择用户
+  selectedRole.value.length = 0
+  // 清空row
+  selectRoleModal.value.row = null
+  // 关闭
+  selectRoleFlag.value = false
+}
+
+// 选择角色穿梭框自定义标签
+const renderLabel = function ({ option }) {
+  return h(
+    'div',
+    {
+      style: {
+        display: 'flex',
+        margin: '6px 0',
+      },
+    },
+    {
+      default: () => [
+        h('i', {
+          class: `${option.icon} text-18 mr-8`,
+        }),
+        h(
+          'div',
+          {
+            style: {
+              display: 'flex',
+              marginLeft: '6px',
+              alignSelf: 'center',
+            },
+          },
+          { default: () => option.label },
+        ),
+      ],
+    },
+  )
+}
 
 const genders = [
   { label: '男', value: 'MALE' },
@@ -255,7 +387,7 @@ const columns = [
             size: 'tiny',
             type: 'info',
             secondary: true,
-            onClick: () => handleOpenRolesSet(row),
+            onClick: () => handelSelectRole(row),
           },
           {
             default: () => '分配角色',

@@ -59,6 +59,13 @@ export default {
   setRole: data => request.patch(`/user/setRole`, data),
 
   /**
+   * 查询用户的角色列表
+   * @param id 用户id
+   * @returns {*} 用户的角色列表
+   */
+  getUserRole: id => request.get(`/user/queryUserRoleList?id=${id}`),
+
+  /**
    * 获取所有已启用的角色。
    * @returns {Promise} - 一个Promise对象，用于处理异步请求的结果。
    */

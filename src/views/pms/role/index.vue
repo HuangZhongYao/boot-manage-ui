@@ -174,7 +174,7 @@
       ref="selectUserModal"
       v-model:show="selectUserFlag"
       style="width: 800px"
-      title="分配用户"
+      :title="selectUserModalTitle"
       preset="dialog"
       :mask-closable="false"
       close-on-esc
@@ -210,8 +210,6 @@ defineOptions({ name: 'RoleMgt' })
 const $table = ref(null)
 /** QueryBar筛选参数（可选） */
 const queryItems = ref({})
-// 选择用户 用户选项数组
-let selectUserOptions = []
 
 // 页码挂载函数
 onMounted(() => {
@@ -270,6 +268,17 @@ function cancelEditRole() {
   showEditRoleFlag.value = false
 }
 
+// 分配用户模态框
+const selectUserModal = ref(null)
+// 分配角色模态框标题
+let selectUserModalTitle
+// 控制分配用户模态框显示变量
+const selectUserFlag = ref(false)
+// 已选择用户数组
+const selectedUser = ref([])
+// 选择用户 用户选项数组
+let selectUserOptions = []
+
 /**
  * 获取用户
  */
@@ -285,12 +294,7 @@ function getAllUsers() {
     ))
   })
 }
-// 分配用户模态框
-const selectUserModal = ref(null)
-// 控制分配用户模态框显示变量
-const selectUserFlag = ref(false)
-// 已选择用户数组
-const selectedUser = ref([])
+
 /**
  * 点击分配用户按钮触发方法
  * @param row
@@ -304,6 +308,8 @@ function handelSelectUser(row) {
     selectedUser.value.length = 0
     selectedUser.value.push(...result.map(item => item.id))
   })
+  // 设置标题
+  selectUserModalTitle = `${row.name}分配用户`
   // 给模态框传递一个自定数据
   selectUserModal.value.row = row
   // 显示模态框
