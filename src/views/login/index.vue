@@ -21,11 +21,11 @@
           {{ title }}
         </h2>
         <n-input
-          v-model:value="loginInfo.username"
+          v-model:value="loginInfo.account"
           autofocus
           class="mt-32 h-40 items-center"
-          placeholder="请输入用户名"
-          :maxlength="20"
+          placeholder="请输入账号"
+          :maxlength="50"
         >
           <template #prefix>
             <i class="i-fe:user mr-12 opacity-20" />
@@ -37,7 +37,7 @@
           type="password"
           show-password-on="mousedown"
           placeholder="请输入密码"
-          :maxlength="20"
+          :maxlength="50"
           @keydown.enter="handleLogin()"
         >
           <template #prefix>
@@ -84,7 +84,7 @@ const route = useRoute()
 const title = import.meta.env.VITE_TITLE
 
 const loginInfo = ref({
-  username: '',
+  account: '',
   password: '',
 })
 
@@ -110,7 +110,7 @@ function onSuccess() {
 // 记住我自动回填
 const localLoginInfo = lStorage.get('loginInfo')
 if (localLoginInfo) {
-  loginInfo.value.username = localLoginInfo.username || ''
+  loginInfo.value.account = localLoginInfo.account || ''
   loginInfo.value.password = localLoginInfo.password || ''
 }
 
@@ -123,16 +123,16 @@ const loading = ref(false)
  * @returns {Promise<*>}
  */
 async function handleLogin() {
-  const { username, password, captcha } = loginInfo.value
-  if (!username || !password)
+  const { account, password, captcha } = loginInfo.value
+  if (!account || !password)
     return $message.warning('请输入用户名和密码')
 
   try {
     loading.value = true
     $message.loading('正在验证，请稍后...', { key: 'login' })
-    const { result } = await api.login({ username, password: password.toString(), captcha })
+    const { result } = await api.login({ account, password: password.toString(), captcha })
     if (isRemember.value) {
-      lStorage.set('loginInfo', { username, password })
+      lStorage.set('loginInfo', { account, password })
     }
     else {
       lStorage.remove('loginInfo')
