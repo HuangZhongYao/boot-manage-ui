@@ -27,17 +27,17 @@
                 <span class="ml-4">返回</span>
               </div>
             </template>
-            <div class="mr-12 h-16 w-4 rounded-l-2 bg-primary" />
-            <h2 class="font-normal">
+            <div class="mr-12 h-18 w-3 rounded-l-2 bg-primary" />
+            <h3 class="font-normal">
               {{ title ?? route.meta?.title }}
-            </h2>
+            </h3>
             <slot name="title-suffix" />
           </div>
           <slot name="action" />
         </template>
       </AppCard>
       <transition name="fade-slide" mode="out-in" appear>
-        <AppCard class="cus-scroll m-12 h-0 flex-1 rounded-8 p-24" bordered>
+        <AppCard class="cus-scroll m-10 h-0 flex-1 rounded-8 p-24" bordered>
           <slot />
         </AppCard>
       </transition>
