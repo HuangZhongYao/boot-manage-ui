@@ -228,22 +228,11 @@ const iconOptions = icons.map(item => ({
 const showEditRoleFlag = ref(false)
 const showEditRoleSubmitFlag = ref(false)
 const editRoleRef = ref(null)
-const editRoleForm = ref({ rules: {
-  code: {
-    required: true,
-    message: '请输入角色编码',
-    trigger: ['input', 'blur'],
-  },
-  name: {
-    required: true,
-    message: '请输入角色名',
-    trigger: ['input', 'blur'],
-  },
-} })
+const editRoleForm = ref({})
 
 /**
  * 点击编辑角色
- * @param row角色数据
+ * @param row 角色数据
  */
 function handelEditRole(row) {
   // eslint-disable-next-line no-use-before-define
@@ -255,18 +244,22 @@ function handelEditRole(row) {
  * 保存编辑角色
  */
 function saveEditRole() {
-  editRoleRef.value.validate()
-  showEditRoleSubmitFlag.value = true
-  api.update(editRoleForm.value).then((res) => {
-    if (res.result) {
-      showEditRoleFlag.value = false
-      $message.success('操作成功')
+  editRoleRef.value.validate((errors) => {
+    if (!errors) {
+      // 验证通过则提交
+      showEditRoleSubmitFlag.value = true
+      api.update(editRoleForm.value).then((res) => {
+        if (res.result) {
+          showEditRoleFlag.value = false
+          $message.success('操作成功')
+        }
+        else {
+          $message.warning(res.message)
+        }
+        showEditRoleSubmitFlag.value = false
+        $table.value?.handleSearch()
+      })
     }
-    else {
-      $message.warning(res.message)
-    }
-    showEditRoleSubmitFlag.value = false
-    $table.value?.handleSearch()
   })
 }
 
