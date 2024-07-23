@@ -45,28 +45,6 @@
           </template>
         </n-input>
 
-        <div class="mt-20 flex items-center">
-          <n-input
-            v-model:value="loginInfo.captcha"
-            class="h-40 items-center"
-            palceholder="请输入验证码"
-            :maxlength="4"
-            @keydown.enter="handleLogin()"
-          >
-            <template #prefix>
-              <i class="i-fe:key mr-12 opacity-20" />
-            </template>
-          </n-input>
-          <img
-            v-if="captchaUrl"
-            :src="captchaUrl"
-            alt="验证码"
-            height="40"
-            class="ml-12 w-80 cursor-pointer"
-            @click="initCaptcha"
-          >
-        </div>
-
         <n-checkbox
           class="mt-20"
           :checked="isRemember"
@@ -76,35 +54,29 @@
 
         <div class="mt-20 flex items-center">
           <n-button
-            class="h-40 flex-1 rounded-5 text-16"
-            type="primary"
-            ghost
-            @click="quickLogin()"
-          >
-            一键体验
-          </n-button>
-
-          <n-button
             class="ml-32 h-40 flex-1 rounded-5 text-16"
             type="primary"
             :loading="loading"
-            @click="handleLogin()"
+            @click="onShow()"
           >
             登录
           </n-button>
         </div>
+        <Vcode :show="isShow" range="8" @success="onSuccess" @close="onClose" />
       </div>
     </div>
-
     <TheFooter class="py-12" />
   </div>
 </template>
 
 <script setup>
 import { useStorage } from '@vueuse/core'
+import Vcode from 'vue3-puzzle-vcode'
+import { useRoute, useRouter } from 'vue-router'
 import api from './api'
-import { lStorage, throttle } from '@/utils'
+import { lStorage } from '@/utils'
 import { useAuthStore } from '@/store'
+import { TheFooter } from '@/components/index.js'
 
 const authStore = useAuthStore()
 const router = useRouter()
@@ -116,56 +88,70 @@ const loginInfo = ref({
   password: '',
 })
 
-const captchaUrl = ref('')
-const initCaptcha = throttle(() => {
-  captchaUrl.value = `${import.meta.env.VITE_AXIOS_BASE_URL}/auth/captcha?${Date.now()}`
-}, 500)
+// 定义一个变量控制验证组件显示
+const isShow = ref(false)
 
+// 关闭验证组件方法
+function onShow() {
+  isShow.value = true
+}
+
+// 关闭验证组件方法
+function onClose() {
+  isShow.value = false
+}
+
+// 验证组件验证通过回调
+function onSuccess() {
+  isShow.value = false
+  handleLogin()
+}
+
+// 记住我自动回填
 const localLoginInfo = lStorage.get('loginInfo')
 if (localLoginInfo) {
   loginInfo.value.username = localLoginInfo.username || ''
   loginInfo.value.password = localLoginInfo.password || ''
 }
-initCaptcha()
 
-function quickLogin() {
-  loginInfo.value.username = 'admin'
-  loginInfo.value.password = '123456'
-  handleLogin(true)
-}
-
+// 记住账号密码
 const isRemember = useStorage('isRemember', true)
 const loading = ref(false)
-async function handleLogin(isQuick) {
+
+/**
+ * 登录方法
+ * @returns {Promise<*>}
+ */
+async function handleLogin() {
   const { username, password, captcha } = loginInfo.value
   if (!username || !password)
     return $message.warning('请输入用户名和密码')
-  if (!isQuick && !captcha)
-    return $message.warning('请输入验证码')
+
   try {
     loading.value = true
     $message.loading('正在验证，请稍后...', { key: 'login' })
-    const { result } = await api.login({ username, password: password.toString(), captcha, isQuick })
+    const { result } = await api.login({ username, password: password.toString(), captcha })
     if (isRemember.value) {
       lStorage.set('loginInfo', { username, password })
     }
     else {
       lStorage.remove('loginInfo')
     }
+    // 登录回调
     onLoginSuccess(result)
   }
   catch (error) {
-    // 10003为验证码错误专属业务码
-    if (error?.code === 10003) {
-      // 为防止爆破，验证码错误则刷新验证码
-      initCaptcha()
-    }
     $message.destroy('login')
     console.error(error)
   }
   loading.value = false
 }
 
+/**
+ * 登录成功
+ * @param data
+ * @returns {Promise<void>}
+ */
 async function onLoginSuccess(data = {}) {
   authStore.setToken(data)
   $message.loading('登录中...', { key: 'login' })
