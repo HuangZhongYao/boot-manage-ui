@@ -44,9 +44,9 @@ export function resolveResError(code, message, needTip = true) {
         },
       })
       return false
-    // 处理请求被拒绝的错误
+    // 处理无权限请求被拒绝的错误
     case 403:
-      message = '请求被拒绝'
+      message = `请求被拒绝: ${message}`
       break
     // 处理请求资源或接口不存在的错误
     case 404:
