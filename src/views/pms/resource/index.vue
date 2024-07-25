@@ -212,7 +212,7 @@ function handleAddBtn() {
   modalRef.value?.handleOpen({
     action: 'add',
     title: '新增按钮',
-    row: { type: 'BUTTON', parentId: currentMenu.value.id },
+    row: { type: 'BUTTON', icon: 'i-me:btn', parentId: currentMenu.value.id },
     okText: '保存',
   })
 }
