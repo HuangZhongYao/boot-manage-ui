@@ -18,7 +18,7 @@
     <MeCrud
       ref="$table"
       v-model:query-items="queryItems"
-      :scroll-x="1200"
+      :scroll-x="1900"
       :columns="columns"
       :get-data="api.read"
     >
@@ -327,15 +327,15 @@ const columns = [
   {
     title: '头像',
     key: 'avatarUrl',
-    width: 80,
+    width: 60,
     render: ({ avatarUrl }) =>
       h(NAvatar, {
         size: 'medium',
         src: avatarUrl,
       }),
   },
-  { title: '用户名', key: 'username', width: 130, ellipsis: { tooltip: true } },
-  { title: '账号', key: 'account', width: 130, ellipsis: { tooltip: true } },
+  { title: '用户名', key: 'username', width: 100, ellipsis: { tooltip: true } },
+  { title: '账号', key: 'account', width: 100, ellipsis: { tooltip: true } },
   {
     title: '角色',
     key: 'roles',
@@ -357,31 +357,14 @@ const columns = [
   {
     title: '性别',
     key: 'gender',
-    width: 80,
+    width: 40,
     render: ({ gender }) => genders.find(item => gender === item.value)?.label ?? '',
   },
-  { title: '手机号', key: 'phone', width: 150, ellipsis: { tooltip: true } },
-  {
-    title: '创建时间',
-    key: 'createdTime',
-    width: 180,
-    render(row) {
-      return h('span', formatDateTime(row.createTime))
-    },
-  },
-  { title: '描述', key: 'remark', width: 150, ellipsis: { tooltip: true } },
-  {
-    title: '最后登录时间',
-    key: 'lastLoginTime',
-    width: 180,
-    render(row) {
-      return h('span', formatDateTime(row.createTime))
-    },
-  },
+  { title: '手机号', key: 'phone', width: 90, ellipsis: { tooltip: true } },
   {
     title: '状态',
     key: 'enable',
-    width: 120,
+    width: 80,
     render: row =>
       h(
         NSwitch,
@@ -389,6 +372,7 @@ const columns = [
           size: 'small',
           rubberBand: false,
           value: row.enable,
+          disabled: row.account === 'admin',
           loading: !!row.enableLoading,
           onUpdateValue: () => handleEnable(row),
         },
@@ -399,10 +383,27 @@ const columns = [
       ),
   },
   {
+    title: '创建时间',
+    key: 'createdTime',
+    width: 120,
+    render(row) {
+      return h('span', formatDateTime(row.createTime))
+    },
+  },
+  {
+    title: '最后登录时间',
+    key: 'lastLoginTime',
+    width: 120,
+    render(row) {
+      return h('span', row.lastLoginTime ? formatDateTime(row.lastLoginTime) : '')
+    },
+  },
+  { title: '描述', key: 'remark', width: 150, ellipsis: { tooltip: true } },
+  {
     title: '操作',
     key: 'actions',
-    width: 260,
-    align: 'left',
+    width: 150,
+    align: 'right',
     fixed: 'right',
     hideInExcel: true,
     render(row) {
@@ -413,7 +414,7 @@ const columns = [
             size: 'tiny',
             type: 'info',
             secondary: true,
-            vIf: false,
+            disabled: row.account === 'admin',
             onClick: () => handelSelectRole(row),
           },
           {
@@ -441,6 +442,7 @@ const columns = [
             size: 'tiny',
             type: 'error',
             style: 'margin-left: 8px;',
+            disabled: row.account === 'admin',
             onClick: () => handleDelete({ ids: [row.id] }),
           },
           {

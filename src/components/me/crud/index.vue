@@ -42,6 +42,7 @@
     :remote="remote"
     :loading="loading"
     :scroll-x="scrollX"
+    :max-height="maxHeight"
     :columns="columns"
     :data="tableData"
     :row-key="(row) => row[rowKey]"
@@ -73,6 +74,10 @@ const props = defineProps({
   scrollX: {
     type: Number,
     default: 1200,
+  },
+  maxHeight: {
+    type: Number,
+    default: 500,
   },
   rowKey: {
     type: String,

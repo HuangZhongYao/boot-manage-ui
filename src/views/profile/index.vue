@@ -59,7 +59,7 @@
           {{ userStore.userInfo?.phone }}
         </n-descriptions-item>
         <n-descriptions-item label="最后登录时间">
-          {{ formatDateTime(userStore.userInfo?.lastLoginTime) }}
+          {{ userStore.userInfo?.lastLoginTime ? formatDateTime(userStore.userInfo.lastLoginTime) : '' }}
         </n-descriptions-item>
         <n-descriptions-item label="备注">
           {{ userStore.userInfo?.remark }}
@@ -92,7 +92,7 @@
         <n-form ref="profileFormRef" :model="profileForm" label-placement="left">
           <n-form-item label="账号">
             <QuestionLabel label="" content="登录用户名不可更改" />
-            <n-input :value="profileForm.username" disabled />
+            <n-input :value="profileForm.account" disabled />
           </n-form-item>
           <n-form-item label="昵称" path="username">
             <QuestionLabel label="" content="用户名也是昵称" />
@@ -111,7 +111,7 @@
             <n-input v-model:value="profileForm.phone" placeholder="请输入电话" />
           </n-form-item>
           <n-form-item label="备注" path="remark">
-            <QuestionLabel label="" content="请输入地址" />
+            <QuestionLabel label="" content="备注信息" />
             <n-input v-model:value="profileForm.remark" type="textarea" maxlength="230" placeholder="备注" show-count />
           </n-form-item>
         </n-form>
@@ -176,11 +176,13 @@ const genders = [
 const [profileFormRef, profileForm, profileValidation] = useForm({
   id: userStore.userId,
   nickName: userStore.nickName,
+  account: userStore.account,
   username: userStore.username,
   gender: userStore.userInfo?.gender ?? 0,
   address: userStore.userInfo?.address,
   email: userStore.userInfo?.email,
   phone: userStore.userInfo?.phone,
+  remark: userStore.userInfo?.remark,
 })
 
 const editProfileFlag = ref(false)
@@ -190,6 +192,7 @@ async function handleProfileSave() {
   await api.updateProfile(profileForm.value)
   $message.success('资料修改成功')
   await refreshUserInfo()
+  editProfileFlag.value = false
 }
 
 async function refreshUserInfo() {
