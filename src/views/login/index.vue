@@ -26,6 +26,7 @@
           class="mt-32 h-40 items-center"
           placeholder="请输入账号"
           :maxlength="50"
+          @keydown.enter="onShow()"
         >
           <template #prefix>
             <i class="i-fe:user mr-12 opacity-20" />
@@ -38,7 +39,7 @@
           show-password-on="mousedown"
           placeholder="请输入密码"
           :maxlength="50"
-          @keydown.enter="handleLogin()"
+          @keydown.enter="onShow()"
         >
           <template #prefix>
             <i class="i-fe:lock mr-12 opacity-20" />
