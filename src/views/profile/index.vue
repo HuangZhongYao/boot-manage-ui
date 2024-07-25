@@ -15,13 +15,13 @@
           <div class="flex items-center text-16">
             <span>用户名:</span>
             <span class="ml-12 opacity-80">{{ userStore.username }}</span>
-            <n-button class="ml-32" type="primary" text @click="pwdModalRef.open()">
+            <n-button v-permission="'ChangePwd'" class="ml-32" type="primary" text @click="pwdModalRef.open()">
               <i class="i-fe:edit mr-4" />
               修改密码
             </n-button>
           </div>
           <div class="mt-16 flex items-center">
-            <n-button type="primary" ghost @click="avatarModalRef.open()">
+            <n-button v-permission="'ChangeAvatar'" type="primary" ghost @click="avatarModalRef.open()">
               更改头像
             </n-button>
             <span class="ml-12 opacity-60">
@@ -34,7 +34,7 @@
 
     <n-card class="mt-20" title="个人资料信息">
       <template #header-extra>
-        <n-button type="primary" text @click="editProfileFlag = true">
+        <n-button v-permission="'EditProfile'" type="primary" text @click="editProfileFlag = true">
           <i class="i-fe:edit mr-4" />
           修改资料
         </n-button>

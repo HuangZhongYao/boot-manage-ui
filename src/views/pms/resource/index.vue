@@ -24,7 +24,7 @@
             <h3 class="mb-12">
               {{ currentMenu.name }}
             </h3>
-            <NButton size="tiny" type="primary" @click="handleEdit(currentMenu)">
+            <NButton v-permission="'EditResources'" size="tiny" type="primary" @click="handleEdit(currentMenu)">
               <i class="i-material-symbols:edit-outline mr-4 text-14" />
               编辑
             </NButton>
@@ -73,7 +73,7 @@
             <h3 class="mb-12">
               按钮
             </h3>
-            <NButton size="small" type="primary" @click="handleAddBtn">
+            <NButton v-permission="'AddResources'" size="small" type="primary" @click="handleAddBtn">
               <i class="i-fe:plus mr-4 text-14" />
               新增
             </NButton>
@@ -135,6 +135,7 @@ function handleEdit(item = {}) {
 const btnsColumns = [
   { title: '名称', key: 'name' },
   { title: '编码', key: 'code' },
+  { title: '备注', key: 'description' },
   {
     title: '状态',
     key: 'enable',

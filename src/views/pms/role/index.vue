@@ -9,7 +9,7 @@
 <template>
   <CommonPage>
     <template #action>
-      <NButton type="primary" size="small" @click="handleAdd()">
+      <NButton v-permission="'AddRole'" type="primary" size="small" @click="handleAdd()">
         <i class="i-material-symbols:add mr-4 text-18" />
         新增角色
       </NButton>
@@ -523,5 +523,19 @@ async function handleEnable(row) {
 }
 
 const permissionTree = ref([])
-api.getAllPermissionTree().then(({ result = [] }) => (permissionTree.value = result))
+api.getAllPermissionTree().then(({ result = [] }) => {
+  // 将禁用资源在树结构中禁止勾选
+  setDisabledRecursively(result)
+  permissionTree.value = result
+})
+
+// 使用递归函数来设置树结构中每个节点的 disabled 属性
+function setDisabledRecursively(items) {
+  items.forEach((item) => {
+    item.disabled = !item.enable
+    if (item.children && item.children.length > 0) {
+      setDisabledRecursively(item.children)
+    }
+  })
+}
 </script>
