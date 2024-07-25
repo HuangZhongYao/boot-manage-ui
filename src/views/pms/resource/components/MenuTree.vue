@@ -42,6 +42,7 @@ import { withModifiers } from 'vue'
 import { NButton } from 'naive-ui'
 import api from '../api'
 import ResAddOrEdit from './ResAddOrEdit.vue'
+import isPermission from '@/utils/permissionsTool.js'
 
 defineProps({
   treeData: {
@@ -84,6 +85,7 @@ function renderSuffix({ option }) {
         type: 'primary',
         title: '新增下级菜单',
         size: 'tiny',
+        disabled: !isPermission('AddResources'),
         onClick: withModifiers(() => handleAdd({ parentId: option.id }), ['stop']),
       },
       { default: () => '新增' },
@@ -96,6 +98,7 @@ function renderSuffix({ option }) {
         type: 'error',
         size: 'tiny',
         style: 'margin-left: 12px;',
+        disabled: !isPermission('DelResources'),
         onClick: withModifiers(() => handleDelete(option), ['stop']),
       },
       { default: () => '删除' },

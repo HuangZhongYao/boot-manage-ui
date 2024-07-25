@@ -223,6 +223,7 @@ import api from './api'
 import { MeCrud, MeModal, MeQueryItem } from '@/components'
 import { useCrud } from '@/composables'
 import { formatDateTime } from '@/utils/index.js'
+import isPermission from "@/utils/permissionsTool.js";
 
 defineOptions({ name: 'RoleMgt' })
 
@@ -444,7 +445,7 @@ const columns = [
           rubberBand: false,
           value: row.enable,
           loading: !!row.enableLoading,
-          disabled: row.code === 'SUPER_ADMIN',
+          disabled: row.code === 'SUPER_ADMIN' || !isPermission('Enable|DisableRole'),
           onUpdateValue: () => handleEnable(row),
         },
         {
@@ -468,6 +469,7 @@ const columns = [
             size: 'tiny',
             type: 'info',
             secondary: true,
+            disabled: row.code === 'SUPER_ADMIN' || !isPermission('SetUser'),
             onClick: () => handelSelectUser(row),
           },
           {
@@ -481,7 +483,7 @@ const columns = [
             size: 'tiny',
             type: 'primary',
             style: 'margin-left: 12px;',
-            disabled: row.code === 'SUPER_ADMIN',
+            disabled: row.code === 'SUPER_ADMIN' || !isPermission('EditRole'),
             onClick: () => handelEditRole(row),
           },
           {
@@ -496,7 +498,7 @@ const columns = [
             size: 'tiny',
             type: 'error',
             style: 'margin-left: 12px;',
-            disabled: row.code === 'SUPER_ADMIN',
+            disabled: row.code === 'SUPER_ADMIN' || !isPermission('DelRole'),
             onClick: () => handleDelete({ ids: [row.id] }),
           },
           {

@@ -169,6 +169,7 @@
 <script setup>
 import { NAvatar, NButton, NSwitch, NTag } from 'naive-ui'
 import api from './api'
+import isPermission from '@/utils/permissionsTool'
 import { formatDateTime } from '@/utils'
 import { MeCrud, MeModal, MeQueryItem } from '@/components'
 import { useCrud } from '@/composables'
@@ -374,7 +375,7 @@ const columns = [
           size: 'small',
           rubberBand: false,
           value: row.enable,
-          disabled: row.account === 'admin',
+          disabled: row.account === 'admin' || !isPermission('Enable|DisableUser'),
           loading: !!row.enableLoading,
           onUpdateValue: () => handleEnable(row),
         },
@@ -416,7 +417,7 @@ const columns = [
             size: 'tiny',
             type: 'info',
             secondary: true,
-            disabled: row.account === 'admin',
+            disabled: row.account === 'admin' || !isPermission('SetRole'),
             onClick: () => handelSelectRole(row),
           },
           {
@@ -430,6 +431,7 @@ const columns = [
             size: 'tiny',
             type: 'primary',
             style: 'margin-left: 8px;',
+            disabled: !isPermission('ResetPwd'),
             onClick: () => handleOpen({ action: 'reset', title: '重置密码', row, onOk: onSave }),
           },
           {
@@ -444,7 +446,7 @@ const columns = [
             size: 'tiny',
             type: 'error',
             style: 'margin-left: 8px;',
-            disabled: row.account === 'admin',
+            disabled: row.account === 'admin' || !isPermission('DelUser'),
             onClick: () => handleDelete({ ids: [row.id] }),
           },
           {

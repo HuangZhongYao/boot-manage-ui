@@ -100,6 +100,7 @@ import MenuTree from './components/MenuTree.vue'
 import ResAddOrEdit from './components/ResAddOrEdit.vue'
 import api from './api'
 import { MeCrud } from '@/components'
+import isPermission from '@/utils/permissionsTool.js'
 
 defineOptions({ name: 'ResourceMgt' })
 
@@ -147,6 +148,7 @@ const btnsColumns = [
           rubberBand: false,
           value: row.enable,
           loading: !!row.enableLoading,
+          disabled: !isPermission('Enable|DisableResources'),
           onUpdateValue: () => handleEnable(row),
         },
         {
@@ -169,6 +171,7 @@ const btnsColumns = [
             size: 'small',
             type: 'primary',
             style: 'margin-left: 12px;',
+            disabled: !isPermission('EditResources'),
             onClick: () => handleEditBtn(row),
           },
           {
@@ -183,6 +186,7 @@ const btnsColumns = [
             size: 'small',
             type: 'error',
             style: 'margin-left: 12px;',
+            disabled: !isPermission('DelResources'),
             onClick: () => handleDeleteBtn(row.id),
           },
           {
