@@ -514,7 +514,7 @@ const columns = [
 async function handleEnable(row) {
   row.enableLoading = true
   try {
-    await api.update({ id: row.id, enable: !row.enable })
+    await api.setState({ id: row.id, state: !row.enable })
     row.enableLoading = false
     $message.success('操作成功')
     $table.value?.handleSearch()

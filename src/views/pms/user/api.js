@@ -59,6 +59,13 @@ export default {
   setRole: data => request.patch(`/user/setRole`, data),
 
   /**
+   * 设置用户启用状态
+   * @param data
+   * @returns {Promise<axios.AxiosResponse<any>>}
+   */
+  setState: data => request.patch(`/user/setState`, data),
+
+  /**
    * 查询用户的角色列表
    * @param id 用户id
    * @returns {*} 用户的角色列表

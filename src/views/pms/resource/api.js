@@ -15,5 +15,6 @@ export default {
   getComponents: () => axios.get(`${import.meta.env.VITE_PUBLIC_PATH}components.json`),
   addPermission: data => request.post('/resources/addResources', data),
   savePermission: (id, data) => request.patch(`/resources/editResources`, data),
+  setState: data => request.patch(`/resources/setState`, data),
   deletePermission: data => request.delete(`/resources/delResources`, { data }),
 }

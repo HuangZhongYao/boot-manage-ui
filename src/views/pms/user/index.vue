@@ -462,7 +462,7 @@ const columns = [
 async function handleEnable(row) {
   row.enableLoading = true
   try {
-    await api.update({ id: row.id, enable: !row.enable })
+    await api.setState({ id: row.id, state: !row.enable })
     row.enableLoading = false
     $message.success('操作成功')
     $table.value?.handleSearch()
@@ -470,16 +470,6 @@ async function handleEnable(row) {
   catch (error) {
     row.enableLoading = false
   }
-}
-
-function handleOpenRolesSet(row) {
-  const roleIds = row.roles?.map(item => item.id)
-  handleOpen({
-    action: 'setRole',
-    title: '分配角色',
-    row: { id: row.id, userId: row.id, username: row.username, account: row.account, roleIds },
-    onOk: onSave,
-  })
 }
 
 function onSave() {

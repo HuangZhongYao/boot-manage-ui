@@ -17,9 +17,9 @@ export default {
   queryRoleUser: roleId => request.get(`/role/queryRoleUserList?id=${roleId}`),
   // 分配角色的用户接口
   setRoleUser: data => request.post('/role/setRoleUser', data),
+  // 设置角色启用状态
+  setState: data => request.patch('/role/setState', data),
   // 查询全部用户
   getAllUsers: () => request.get('/user/queryAllUserList'),
   getAllPermissionTree: () => request.get('/resources/resourcesTree'),
-  addRoleUsers: (roleId, data) => request.patch(`/role/users/add/${roleId}`, data),
-  removeRoleUsers: (roleId, data) => request.patch(`/role/users/remove/${roleId}`, data),
 }

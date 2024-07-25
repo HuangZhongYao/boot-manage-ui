@@ -250,8 +250,9 @@ function handleDeleteBtn(id) {
 async function handleEnable(item) {
   try {
     item.enableLoading = true
-    await api.savePermission(item.id, {
-      enable: !item.enable,
+    await api.setState({
+      id: item.id,
+      state: !item.enable,
     })
     $message.success('操作成功')
     $table.value?.handleSearch()
