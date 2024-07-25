@@ -130,13 +130,32 @@
       close-on-esc
       type="success"
       :loading="!selectRoleFlag"
-      positive-text="保存"
-      negative-text="取消"
+      :positive-text="selectRoleLoadingFlag ? '' : '保存'"
+      :negative-text="selectRoleLoadingFlag ? '' : '取消'"
       @positive-click="saveSelectRole"
       @negative-click="cancelSelectRole"
       @on-after-leave="cancelSelectRole"
     >
+      <n-space v-show="selectRoleLoadingFlag" :size="[50, 5]" justify="center">
+        <n-skeleton height="35px" width="310px" />
+        <n-skeleton height="35px" width="310px" />
+        <n-skeleton height="35px" width="310px" />
+        <n-skeleton height="35px" width="310px" />
+        <n-skeleton height="35px" width="310px" />
+        <n-skeleton height="35px" width="310px" />
+        <n-skeleton height="35px" width="310px" />
+        <n-skeleton height="35px" width="310px" />
+        <n-skeleton height="35px" width="310px" />
+        <n-skeleton height="35px" width="310px" />
+        <n-skeleton height="35px" width="310px" />
+        <n-skeleton height="35px" width="310px" />
+        <n-skeleton height="35px" width="310px" />
+        <n-skeleton height="35px" width="310px" />
+        <n-skeleton height="35px" width="310px" />
+        <n-skeleton height="35px" width="310px" />
+      </n-space>
       <n-transfer
+        v-show="!selectRoleLoadingFlag"
         v-model:value="selectedRole"
         :options="selectRoleOptions"
         :render-source-label="renderLabel"
@@ -170,6 +189,8 @@ const selectRoleModal = ref(null)
 let selectRoleModalTitle
 // 控制分配角色模态框显示变量
 const selectRoleFlag = ref(false)
+// 分配角色加载层
+const selectRoleLoadingFlag = ref(false)
 // 已选择角色数组
 const selectedRole = ref([])
 // 选择角色 角色选项数组
@@ -179,20 +200,25 @@ let selectRoleOptions = []
  * 点击分配用户按钮触发方法
  * @param row
  */
-function handelSelectRole(row) {
+async function handelSelectRole(row) {
+  // 显示模态框
+  selectRoleFlag.value = true
+  // 显示骨架屏加载层
+  selectRoleLoadingFlag.value = true
   // 获取用户
-  getAllRoles()
+  await getAllRoles()
   // 回显穿梭框
-  api.getUserRole(row.id).then(({ result = [] }) => {
+  await api.getUserRole(row.id).then(({ result = [] }) => {
     // 清空
     selectedRole.value.length = 0
     selectedRole.value.push(...result.map(item => item.id))
   })
+  // 关闭骨架屏加载层
+  selectRoleLoadingFlag.value = false
+  // 设置模态框标题
   selectRoleModalTitle = `${row.username}分配角色`
   // 给模态框传递一个自定数据
   selectRoleModal.value.row = row
-  // 显示模态框
-  selectRoleFlag.value = true
 }
 
 /**
@@ -387,6 +413,7 @@ const columns = [
             size: 'tiny',
             type: 'info',
             secondary: true,
+            vIf: false,
             onClick: () => handelSelectRole(row),
           },
           {

@@ -186,7 +186,26 @@
       @negative-click="cancelSelectUser"
       @on-after-leave="cancelSelectUser"
     >
+      <n-space v-show="selectUserLoadingFlag" :size="[50, 5]" justify="center">
+        <n-skeleton height="35px" width="310px" />
+        <n-skeleton height="35px" width="310px" />
+        <n-skeleton height="35px" width="310px" />
+        <n-skeleton height="35px" width="310px" />
+        <n-skeleton height="35px" width="310px" />
+        <n-skeleton height="35px" width="310px" />
+        <n-skeleton height="35px" width="310px" />
+        <n-skeleton height="35px" width="310px" />
+        <n-skeleton height="35px" width="310px" />
+        <n-skeleton height="35px" width="310px" />
+        <n-skeleton height="35px" width="310px" />
+        <n-skeleton height="35px" width="310px" />
+        <n-skeleton height="35px" width="310px" />
+        <n-skeleton height="35px" width="310px" />
+        <n-skeleton height="35px" width="310px" />
+        <n-skeleton height="35px" width="310px" />
+      </n-space>
       <n-transfer
+        v-show="!selectUserLoadingFlag"
         v-model:value="selectedUser"
         :options="selectUserOptions"
         source-filterable
@@ -274,6 +293,8 @@ const selectUserModal = ref(null)
 let selectUserModalTitle
 // 控制分配用户模态框显示变量
 const selectUserFlag = ref(false)
+// 分配用户加载层
+const selectUserLoadingFlag = ref(false)
 // 已选择用户数组
 const selectedUser = ref([])
 // 选择用户 用户选项数组
@@ -299,11 +320,15 @@ function getAllUsers() {
  * 点击分配用户按钮触发方法
  * @param row
  */
-function handelSelectUser(row) {
+async function handelSelectUser(row) {
+  // 显示模态框
+  selectUserFlag.value = true
+  // 显示加载层
+  selectUserLoadingFlag.value = true
   // 获取用户
-  getAllUsers()
+  await getAllUsers()
   // 回显穿梭框
-  api.queryRoleUser(row.id).then(({ result = [] }) => {
+  await api.queryRoleUser(row.id).then(({ result = [] }) => {
     // 清空
     selectedUser.value.length = 0
     selectedUser.value.push(...result.map(item => item.id))
@@ -312,8 +337,8 @@ function handelSelectUser(row) {
   selectUserModalTitle = `${row.name}分配用户`
   // 给模态框传递一个自定数据
   selectUserModal.value.row = row
-  // 显示模态框
-  selectUserFlag.value = true
+  // 关闭加载层
+  selectUserLoadingFlag.value = false
 }
 
 /**
