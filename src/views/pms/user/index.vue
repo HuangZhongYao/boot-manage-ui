@@ -331,6 +331,8 @@ const columns = [
     render: ({ avatarUrl }) =>
       h(NAvatar, {
         size: 'medium',
+        round: true,
+        bordered: true,
         src: avatarUrl,
       }),
   },
