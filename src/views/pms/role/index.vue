@@ -102,7 +102,7 @@
     <n-drawer v-model:show="showEditRoleFlag" :width="502">
       <n-drawer-content>
         <template #header>
-          编辑{{ editRoleForm.name }}角色
+          {{ editRoleTitle }}
         </template>
         <n-form
           ref="editRoleRef"
@@ -223,7 +223,7 @@ import api from './api'
 import { MeCrud, MeModal, MeQueryItem } from '@/components'
 import { useCrud } from '@/composables'
 import { formatDateTime } from '@/utils/index.js'
-import isPermission from "@/utils/permissionsTool.js";
+import isPermission from '@/utils/permissionsTool.js'
 
 defineOptions({ name: 'RoleMgt' })
 
@@ -247,6 +247,7 @@ const showEditRoleFlag = ref(false)
 const showEditRoleSubmitFlag = ref(false)
 const editRoleRef = ref(null)
 const editRoleForm = ref({})
+let editRoleTitle
 
 /**
  * 点击编辑角色
@@ -254,7 +255,8 @@ const editRoleForm = ref({})
  */
 function handelEditRole(row) {
   // eslint-disable-next-line no-use-before-define
-  editRoleForm.value = JSON.parse(JSON.stringify(row))
+  editRoleTitle = `编辑${row.name}角色`
+  editRoleForm.value = { ...row }
   showEditRoleFlag.value = true
 }
 

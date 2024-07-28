@@ -21,7 +21,48 @@
       :scroll-x="1900"
       :columns="columns"
       :get-data="api.read"
+      expand
     >
+      <MeQueryItem label="用户名" :label-width="50">
+        <n-input
+          v-model:value="queryItems.username"
+          type="text"
+          placeholder="请输入用户名"
+          clearable
+          style="min-width: 70%"
+          autosize
+        />
+      </MeQueryItem>
+      <MeQueryItem label="用户名" :label-width="50">
+        <n-input
+          v-model:value="queryItems.username"
+          type="text"
+          placeholder="请输入用户名"
+          clearable
+          style="min-width: 70%"
+          autosize
+        />
+      </MeQueryItem>
+      <MeQueryItem label="用户名" :label-width="50">
+        <n-input
+          v-model:value="queryItems.username"
+          type="text"
+          placeholder="请输入用户名"
+          clearable
+          style="min-width: 70%"
+          autosize
+        />
+      </MeQueryItem>
+      <MeQueryItem label="用户名" :label-width="50">
+        <n-input
+          v-model:value="queryItems.username"
+          type="text"
+          placeholder="请输入用户名"
+          clearable
+          style="min-width: 70%"
+          autosize
+        />
+      </MeQueryItem>
       <MeQueryItem label="用户名" :label-width="50">
         <n-input
           v-model:value="queryItems.username"
