@@ -12,7 +12,7 @@ export default {
    * @param data
    * @returns {*}
    */
-  codeGeneration: data => request.post('/generate/codeGeneration', data),
+  codeGeneration: data => request.post('/generate/codeGeneration', data, { responseType: 'blob' }),
 
   /**
    * 获取全部表
