@@ -182,9 +182,6 @@
         <n-icon size="300" :depth="1" color="#0e7a0d">
           <IosCheckmark />
         </n-icon>
-        <n-icon size="30" :depth="1">
-          <Code />
-        </n-icon>
       </n-flex>
     </n-space>
   </CommonPage>
@@ -194,7 +191,7 @@
 import { NInput } from 'naive-ui'
 // 从xicons中导入图标
 import { IosCheckmark, MdArrowBack, MdArrowForward } from '@vicons/ionicons4'
-import { Code, CreditCard, DatabaseExport, FileText, Settings } from '@vicons/tabler'
+import { Code, CreditCard, DatabaseExport, FileText } from '@vicons/tabler'
 import api from './api.js'
 import resourceApi from '@/views/pms/resource/api.js'
 import QuestionLabel from '@/views/pms/resource/components/QuestionLabel.vue'
@@ -204,7 +201,9 @@ defineOptions({ name: 'CodeGenerate' })
 
 // 菜单树数据
 const treeData = ref([])
-
+const menuOptions = computed(() => {
+  return [{ name: '根菜单', id: '', children: treeData.value || [] }]
+})
 // 组件挂载
 onMounted(async () => {
   getTablesData()
@@ -280,10 +279,6 @@ function getTablesData() {
   })
 }
 
-const menuOptions = computed(() => {
-  return [{ name: '根菜单', id: '', children: treeData.value || [] }]
-})
-
 // 步骤二 表单对象
 const stepTwoFormRef = ref(null)
 // 步骤二 表单数据
@@ -291,6 +286,7 @@ const stepTwoFormValue = ref({
   packageName: 'com.github.zuuuyao',
   addResources: true,
   moduleName: null,
+  parentMenuId: null,
 })
 // 步骤二 表单验证规则
 const stepTwoFormRules = {
@@ -307,7 +303,19 @@ const stepTwoFormRules = {
   parentMenuId: {
     required: true,
     message: '请选择所属菜单',
-    trigger: ['input', 'change', 'blur'],
+    trigger: ['input', 'blur', 'change'],
+    validator(rule, value) {
+      // 如果选择根菜单
+      if (value === '') {
+        return true
+      }
+      if (value) {
+        return true
+      }
+      else {
+        return new Error('请选择所属菜单')
+      }
+    },
   },
 }
 
