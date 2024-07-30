@@ -485,6 +485,7 @@ watch(currentRef, (newValue) => {
       stepTwoStatus.value = 'process'
       break
     case 3 :
+      // 查询表字段信息
       getTableColumns(checkedRowKeysRef.value[0])
       stepThreeStatus.value = 'process'
       break
