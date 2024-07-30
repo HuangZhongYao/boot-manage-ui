@@ -290,7 +290,7 @@ function getTablesData() {
 const stepTwoFormRef = ref(null)
 // 步骤二 表单数据
 const stepTwoFormValue = ref({
-  packageName: 'com.github.zuuuyao',
+  packageName: 'org.github.zuuuyao',
   addResources: true,
   moduleName: null,
   parentMenuId: null,
