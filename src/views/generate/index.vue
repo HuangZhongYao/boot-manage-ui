@@ -133,6 +133,13 @@
             />
             <NInput v-model:value="checkedRowKeysRef[0]" disabled placeholder="请选择表" />
           </n-form-item>
+          <n-form-item label="表注释" path="tableComment">
+            <QuestionLabel
+              label=""
+              content="表注释以功能+'表'，如:用户表、订单表、角色表、评论表"
+            />
+            <NInput v-model:value="stepTwoFormValue.tableComment" placeholder="请输入表注释" />
+          </n-form-item>
           <n-form-item label="模块名" path="moduleName">
             <QuestionLabel
               label=""
@@ -287,12 +294,18 @@ const stepTwoFormValue = ref({
   addResources: true,
   moduleName: null,
   parentMenuId: null,
+  tableComment: null,
 })
 // 步骤二 表单验证规则
 const stepTwoFormRules = {
   moduleName: {
     required: true,
     message: '请选择输入模块名',
+    trigger: ['input', 'blur'],
+  },
+  tableComment: {
+    required: true,
+    message: '请选择输入表注释',
     trigger: ['input', 'blur'],
   },
   packageName: {
@@ -446,6 +459,8 @@ function next() {
     }
     // 选择表设置模块名称
     stepTwoFormValue.value.moduleName = tableNameToModuleName(checkedRowKeysRef.value[0])
+    // 表注释
+    stepTwoFormValue.value.tableComment = tableData.value.find(item => item.tableName === checkedRowKeysRef.value[0]).tableComment
   }
 
   if (currentRef.value === 2) {
