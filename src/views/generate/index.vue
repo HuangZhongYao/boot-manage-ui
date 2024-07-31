@@ -185,10 +185,13 @@
           开始生成代码
         </NButton>
       </n-flex>
-      <n-flex v-show="currentRef === 5" justify="center" align="center">
+      <n-flex v-show="currentRef === 5" vertical justify="center" align="center">
         <n-icon size="300" :depth="1" color="#0e7a0d">
           <IosCheckmark />
         </n-icon>
+        <NButton tertiary round type="success" @click="reset">
+          再生成一个
+        </NButton>
       </n-flex>
     </n-space>
   </CommonPage>
@@ -412,7 +415,7 @@ const completeFlag = ref(false)
 // 生成代码加载层
 const loadFlag = ref(false)
 // 步骤状态 默认为等待处理
-const stepOneStatus = ref('wait')
+const stepOneStatus = ref('process')
 const stepTwoStatus = ref('wait')
 const stepThreeStatus = ref('wait')
 const stepFourStatus = ref('wait')
@@ -496,7 +499,9 @@ watch(currentRef, (newValue) => {
       break
   }
   // 判断步骤一状态
-  stepOneStatus.value = checkedRowKeysRef.value.length > 0 ? 'finish' : stepOneStatus.value = 'error'
+  if (currentRef.value !== 1) {
+    stepOneStatus.value = checkedRowKeysRef.value.length > 0 ? 'finish' : stepOneStatus.value = 'error'
+  }
 
   // 判断步骤二状态
   stepTwoFormRef.value?.validate((errors) => {
@@ -575,6 +580,38 @@ async function generateCode() {
   }
   // 关闭加载层
   loadFlag.value = false
+}
+
+/**
+ * 重置方法
+ */
+function reset() {
+  // steps 当前位置
+  currentRef.value = 1
+  // 当前步骤状态
+  currentStatus.value = 'process'
+  // 整个代码生成完成状态
+  completeFlag.value = false
+  // 生成代码加载层
+  loadFlag.value = false
+  // 步骤状态 默认为等待处理
+  stepOneStatus.value = 'process'
+  stepTwoStatus.value = 'wait'
+  stepThreeStatus.value = 'wait'
+  stepFourStatus.value = 'wait'
+  stepFiveStatus.value = 'wait'
+  // 重置步骤一选中状态
+  checkedRowKeysRef.value = []
+  // 重置步骤二数据
+  stepTwoFormValue.value = {
+    packageName: 'org.github.zuuuyao',
+    addResources: true,
+    moduleName: null,
+    parentMenuId: null,
+    tableComment: null,
+  }
+  // 重置步骤三数据
+  stepThreeTableData.value = []
 }
 
 function sleep(ms) {
