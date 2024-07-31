@@ -206,7 +206,7 @@ import api from './api.js'
 import resourceApi from '@/views/pms/resource/api.js'
 import QuestionLabel from '@/views/pms/resource/components/QuestionLabel.vue'
 
-// 定义组件名称
+// 定义组件名称。设置keepAlive需将组件的name设置成当前菜单的code。一定要这样写才可以切换页面时保存当前标签页的状态。
 defineOptions({ name: 'CodeGenerate' })
 
 // 菜单树数据

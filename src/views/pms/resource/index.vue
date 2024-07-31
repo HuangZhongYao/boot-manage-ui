@@ -101,7 +101,7 @@ import ResAddOrEdit from './components/ResAddOrEdit.vue'
 import api from './api'
 import { MeCrud } from '@/components'
 import isPermission from '@/utils/permissionsTool.js'
-
+// 定义组件名称。设置keepAlive需将组件的name设置成当前菜单的code。一定要这样写才可以切换页面时保存当前标签页的状态。
 defineOptions({ name: 'ResourceMgt' })
 
 const treeData = ref([])

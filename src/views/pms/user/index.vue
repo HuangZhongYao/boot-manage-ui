@@ -215,6 +215,7 @@ import { formatDateTime } from '@/utils'
 import { MeCrud, MeModal, MeQueryItem } from '@/components'
 import { useCrud } from '@/composables'
 
+// 定义组件名称。设置keepAlive需将组件的name设置成当前菜单的code。一定要这样写才可以切换页面时保存当前标签页的状态。
 defineOptions({ name: 'UserMgt' })
 
 const $table = ref(null)
