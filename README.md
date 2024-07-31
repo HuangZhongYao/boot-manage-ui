@@ -9,9 +9,9 @@
 
 ## 简介
 
-Boot Admin是一款极简风格的后台管理模板。  
-前端基于`zclzone`的[Vue Naive Admin](https://github.com/zclzone/vue-naive-admin/)进行二次开发，使用 Vite + Vue3 + Naive UI + Pinia + Unocss + 无 Typescript降低门槛  
-后端使用 SpringBoot 3.x + MyBatis-Plus + Sa-Token + Redis + Java 17 + MySql 8.0  
+Boot Admin是一款极简风格的后台管理模板。
+前端基于`zclzone`的[Vue Naive Admin](https://github.com/zclzone/vue-naive-admin/)进行二次开发，使用 Vite + Vue3 + Naive UI + Pinia + Unocss + 无 Typescript降低门槛。
+后端使用 SpringBoot 3.x + MyBatis-Plus + Sa-Token + Redis + Java 17 + MySql 8.0  。
 使用最新技术简单易用、代码优雅、赏心悦目。封装接口开发中常用参数验证、mybatis-plus扩展、统一响应值包装、代码生成，一键生成CRUD开发效率极高！！
 
 ## 设计理念
