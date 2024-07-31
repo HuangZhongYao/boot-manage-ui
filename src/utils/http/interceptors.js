@@ -49,15 +49,38 @@ export function setupInterceptors(axiosInstance) {
 
   // 定义成功状态码列表
   const SUCCESS_CODES = [0, 200]
+
+  const blobToString = (blob) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        if (reader.readyState === FileReader.DONE) { // DONE == 2
+          resolve(reader.result)
+        }
+        else {
+          reject(new Error('Error reading Blob.'))
+        }
+      }
+      reader.onerror = reject
+      reader.readAsText(blob) // 读取 Blob 为文本
+    })
+  }
+
   /**
    * 响应拦截器：在接收到响应后进行处理。
    * @param {Object} response - Axios响应。
    * @returns {Promise} 根据响应内容处理后的承诺。
    */
-  function resResolve(response) {
-    const { data, status, config, statusText, headers } = response
+  async function resResolve(response) {
+    const { status, config, statusText, headers } = response
+    let data = response.data
     // 如果响应内容类型是JSON且包含成功状态码
     if (headers['content-type']?.includes('json')) {
+      // 如果响应为blob读取并转为json对象
+      if (data instanceof Blob) {
+        await blobToString(data).then(dataStr => data = JSON.parse(dataStr))
+      }
+
       // 如果数据中的代码是成功代码之一，返回数据
       if (SUCCESS_CODES.includes(data?.code)) {
         return Promise.resolve(data)
