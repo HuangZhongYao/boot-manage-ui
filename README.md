@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://github.com/HuangZhongYao/boot-manage-ui">
-    <img alt="Vue Naive Admin Logo" width="200" src="./src/assets/images/logo.png">
+    <img alt="Boot Admin Logo" width="200" src="./src/assets/images/logo.png">
   </a>
 </p>
 <p align="center">
