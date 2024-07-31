@@ -12,6 +12,9 @@
       <h3>菜单</h3>
       <div class="flex">
         <n-input v-model:value="pattern" placeholder="搜索" clearable />
+        <NButton class="ml-12" ghost quaternary @click="emit('refresh')">
+          <i class="i-fe:rotate-ccw mr-4 text-14" />
+        </NButton>
         <NButton v-permission="'AddResources'" class="ml-12" type="primary" @click="handleAdd()">
           <i class="i-material-symbols:add mr-4 text-14" />
           新增
