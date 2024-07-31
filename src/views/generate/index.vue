@@ -543,16 +543,13 @@ async function generateCode() {
     tableName: checkedRowKeysRef.value[0],
     ...stepTwoFormValue.value,
     columns: stepThreeTableData.value,
+  }).catch((error) => {
+    // 生成错误处理逻辑
   })
-  // 等待3秒
-  await sleep(3000)
+  // 等待2秒
+  await sleep(2000)
+
   // 判断是否执行成功
-  if (res.success === false) {
-    $message.error(res.message)
-    // 关闭加载层
-    loadFlag.value = false
-    return
-  }
   if (res) {
     $message.success('生成代码成功')
     // 设置状态为完成
@@ -575,9 +572,7 @@ async function generateCode() {
     // 触发链接点击从而开始文件下载
     link.click()
   }
-  else {
-    $message.error('生成代码出错了')
-  }
+
   // 关闭加载层
   loadFlag.value = false
 }
