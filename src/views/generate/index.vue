@@ -218,7 +218,7 @@ const menuOptions = computed(() => {
 onMounted(async () => {
   getTablesData()
   const res = await resourceApi.getMenuTree()
-  treeData.value = res?.result || []
+  treeData.value = (res?.result || []).filter(item => item.type !== 'BUTTON')
 })
 
 // 表格列定义
