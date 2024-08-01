@@ -47,7 +47,7 @@ Boot Admin是一款极简风格的后台管理模板。
 git clone https://github.com/HuangZhongYao/boot-manage-ui.git
 # 安装依赖
 npm install
-# 本地启动 启动后端服务后访问http://localhost:3200 登录账号`admin` 密码 `123456`
+# 本地启动 启动后端服务后访问http://localhost:3200 登录账号admin 密码 123456
 npm run dev
 # 打包
 npm run build
