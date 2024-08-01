@@ -40,10 +40,35 @@ Boot Admin是一款极简风格的后台管理模板。
 ![](https://docs.isme.top/Public/Uploads/2023-11-18/6558568b2b476.png)
 ![](https://docs.isme.top/Public/Uploads/2023-11-18/655853caa9ce8.png)
 
-## boot-manage 后端
+## 安装
 
-Vue Naive Admin 提供一套后端代码，技术栈使用 Nestjs + TypeOrm + MySql，内置 JWT、RABC及模板所需的一些基础接口。
+```shell
+# 拉取最新模板
+git clone https://github.com/HuangZhongYao/boot-manage-ui.git
+# 安装依赖
+npm install
+# 本地启动
+npm run dev
+# 打包
+npm run build
+# 预览构建后的项目
+npm run preview
+```
 
+
+## 后端项目
+
+Boot Admin 提供一套Java最新技术开发的后端代码，简易上手、效率高SpringBoot单体架构版，提供RABC、代码生成、系统基础等接口所需的一些基础接口  。
+技术栈:
+- Java 17
+- SpringBoot 3.2.x
+- Mybatis-Plus
+- Sa-Token
+- JWT
+- Redis
+- MySQL 8
+
+源码
 - 源码-github: [boot-manage | github](https://github.com/HuangZhongYao/boot-manage)
 - 源码-gitee: [boot-manage | gitee](https://gitee.com/smog_huang/boot-manage)
 
