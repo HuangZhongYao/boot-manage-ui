@@ -37,8 +37,13 @@ Boot Admin是一款极简风格的后台管理模板。
 
 ## 极致的性能
 
-![](https://docs.isme.top/Public/Uploads/2023-11-18/6558568b2b476.png)
-![](https://docs.isme.top/Public/Uploads/2023-11-18/655853caa9ce8.png)
+![](./src/assets/images/performance.png)
+![](./src/assets/images/network.png)
+
+## 前端页面预览
+- 登录页面 ![](./src/assets/images/login-page.png)
+- 代码生成页面 ![](./src/assets/images/code.png)
+- 系统管理页面 ![](./src/assets/images/sys.png)
 
 ## 安装
 
