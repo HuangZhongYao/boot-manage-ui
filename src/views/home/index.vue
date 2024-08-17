@@ -27,7 +27,7 @@
           —— 查尔斯·史考伯
         </p>
       </n-card>
-      <n-card class="ml-12 w-70%" title="✨ 欢迎使用 Vue Naive Admin 2.0">
+      <n-card class="ml-12 w-70%" title="✨ 欢迎使用 Boot Admin">
         <template #header-extra>
           <a
             class="text-14 text-primary text-highlight hover:underline hover:opacity-80"
@@ -41,8 +41,8 @@
 
         <p class="opacity-60">
           这是一款极简风格的后台管理模板，包含前后端解决方案，前端使用 Vite + Vue3 + Pinia +
-          Unocss，后端使用 Nestjs + TypeOrm +
-          MySql，简单易用，赏心悦目，历经十几次重构和细节打磨，诚意满满！！
+          Unocss，后端使用 Java17 + SpringBoot 3.x +
+          MySql + Redis，简单易用，赏心悦目，历经十几次重构和细节打磨，诚意满满！！
         </p>
         <footer class="mt-12 flex items-center justify-end">
           <n-button
@@ -58,7 +58,7 @@
             type="primary"
             class="ml-12"
             tag="a"
-            href="https://github.com/zclzone/vue-naive-admin/tree/2.x"
+            href="https://github.com/HuangZhongYao/boot-manage-ui"
             target="__blank"
           >
             代码仓库
