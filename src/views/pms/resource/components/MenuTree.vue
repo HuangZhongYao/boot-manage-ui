@@ -12,7 +12,7 @@
       <h3>菜单</h3>
       <div class="flex">
         <n-input v-model:value="pattern" placeholder="搜索" clearable />
-        <NButton class="ml-12" ghost quaternary @click="emit('refresh')">
+        <NButton class="ml-12" type="primary" ghost quaternary @click="emit('refresh')">
           <i class="i-fe:rotate-ccw mr-4 text-14" />
         </NButton>
         <NButton v-permission="'AddResources'" class="ml-12" type="primary" @click="handleAdd()">
@@ -26,6 +26,7 @@
         :pattern="pattern"
         :data="treeData"
         :selected-keys="[currentMenu?.code]"
+        :render-switcher-icon="renderSwitcherIcon"
         :render-prefix="renderPrefix"
         :render-suffix="renderSuffix"
         :on-update:selected-keys="onSelect"
@@ -42,7 +43,8 @@
 
 <script setup>
 import { withModifiers } from 'vue'
-import { NButton } from 'naive-ui'
+import { NButton, NIcon } from 'naive-ui'
+import { ChevronForward } from '@vicons/ionicons5'
 import api from '../api'
 import ResAddOrEdit from './ResAddOrEdit.vue'
 import isPermission from '@/utils/permissionsTool.js'
@@ -73,6 +75,20 @@ async function handleAdd(data = {}) {
 
 function onSelect(keys, option, { action, node }) {
   emit('update:currentMenu', action === 'select' ? node : null)
+}
+
+/**
+ * 开关图标
+ * @returns {VNode}
+ */
+function renderSwitcherIcon(treeOption) {
+  if (treeOption.option.children && treeOption.option.children.length > 0) {
+    return h(NIcon, null, { default: () => h(ChevronForward) })
+  }
+  else {
+    // 不存在下级不展示开关图标
+    return h(NIcon, null, { default: () => h() })
+  }
 }
 
 function renderPrefix({ option }) {

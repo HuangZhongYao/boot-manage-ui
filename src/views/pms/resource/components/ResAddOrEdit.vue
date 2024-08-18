@@ -35,7 +35,7 @@
         </n-form-item-gi>
         <n-form-item-gi :span="12" path="code" :rule="required">
           <template #label>
-            <QuestionLabel label="编码" content="如果是菜单则对应前端路由的name，使用大驼峰" />
+            <QuestionLabel label="编码" content="如果是菜单则定义组件的名称" />
           </template>
           <n-input v-model:value="modalForm.code" />
         </n-form-item-gi>
