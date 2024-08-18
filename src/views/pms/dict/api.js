@@ -13,24 +13,34 @@ export default {
    * @returns {*}
    */
   addDictType: data => request.post('/dict/addDictType', data),
+
   /**
    * 获取字典类型树
    * @param params
    * @returns {*}
    */
   getDictTypeTree: (params = {}) => request.get('/dict/dictTypeTree', { params }),
+
   /**
    * 编辑字典类型
    * @param data
    * @returns {*}
    */
   editDictType: data => request.patch(`/dict/editDictType`, data),
+
   /**
    * 删除字典类型
    * @param data
    * @returns {*}
    */
   delDictType: data => request.delete(`/dict/delDictType`, { data }),
+
+  /**
+   * 设置字典数据启用状态
+   * @param data
+   * @returns {*}
+   */
+  setStateDictData: data => request.patch('/dict/setStateDictData', data),
 
   /**
    * 添加字典数据
@@ -51,13 +61,19 @@ export default {
    * @param data
    * @returns {*}
    */
-  editDict: data => request.patch(`/dict/editDictData`, data),
+  editDictData: data => request.patch(`/dict/editDictData`, data),
 
   /**
    * 删除字典数据
    * @param data
    * @returns {*}
    */
-  delDict: data => request.delete(`/dict/delDictData`, { data }),
+  delDictData: data => request.delete(`/dict/delDictData`, { data }),
 
+  /**
+   * 设置字典数据启用状态
+   * @param data
+   * @returns {*}
+   */
+  setStateDictType: data => request.patch('/dict/setStateDictType', data),
 }

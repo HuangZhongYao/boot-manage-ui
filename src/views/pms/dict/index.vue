@@ -6,14 +6,14 @@
 <template>
   <CommonPage>
     <n-flex justify="space-between">
-      <n-flex vertical >
+      <n-flex vertical :size="[46, 10]">
         <h3>字典类型</h3>
         <div class="flex">
           <n-input v-model:value="treeOption.pattern" placeholder="搜索" clearable />
           <NButton class="ml-12" type="primary" ghost quaternary @click="initData">
             <i class="i-fe:rotate-ccw mr-4 text-14" />
           </NButton>
-          <NButton class="ml-12" type="primary" @click="handleAdd()">
+          <NButton v-permission="'AddDict'" class="ml-12" type="primary" @click="handleAddDictType()">
             <i class="i-material-symbols:add mr-4 text-14" />
             新增
           </NButton>
@@ -35,17 +35,22 @@
           />
         </n-spin>
       </n-flex>
-      <n-flex vertical class="flex-1" style="flex-grow: 2">
-        <h3 class="mb-12">
-          {{ currentNode?.name }}
-        </h3>
+      <n-flex vertical class="ml-20 flex-1" style="flex-grow: 2">
+        <n-flex inline justify="space-between">
+          <h3>{{ currentNode?.name }}</h3>
+          <NButton v-permission="'AddDict'" :style="currentNode ? '' : 'visibility: hidden'" class="" type="primary" @click="handleAddDictData()">
+            <i class="i-material-symbols:add mr-4 text-14" />
+            新增
+          </NButton>
+        </n-flex>
         <NDataTable
           :remote="true"
           :columns="tableOption.columns"
           :loading="tableOption.loading"
           :data="tableData"
           :pagination="false"
-          :max-height="900"
+          :max-height="600"
+          virtual-scroll
         />
       </n-flex>
     </n-flex>
@@ -76,8 +81,9 @@ const currentNode = ref(null)
 const tableOption = ref({
   columns:
     [
-      { title: '名称', key: 'name', width: 100, ellipsis: { tooltip: true } },
+      { title: '创建时间', key: 'createdTime', width: 120, ellipsis: { tooltip: true } },
       { title: '编码', key: 'code', width: 100, ellipsis: { tooltip: true } },
+      { title: '名称', key: 'name', width: 100, ellipsis: { tooltip: true } },
       { title: '排序值', key: 'sort', width: 100, ellipsis: { tooltip: true } },
       {
         title: '启用状态',
@@ -91,9 +97,9 @@ const tableOption = ref({
               size: 'small',
               rubberBand: false,
               value: row.enable,
-              disabled: false,
+              disabled: !isPermission('EditDict'),
               loading: !!row.enableLoading,
-              onUpdateValue: () => handleEnable(row),
+              onUpdateValue: () => handleDictDataEnable(row),
             },
             {
               checked: () => '启用',
@@ -102,6 +108,42 @@ const tableOption = ref({
           ),
       },
       { title: '备注', key: 'remark', width: 100, ellipsis: { tooltip: true } },
+      {
+        title: '操作',
+        key: 'actions',
+        align: 'right',
+        fixed: 'right',
+        width: 200,
+        render(row) {
+          return [
+            h(
+              NButton,
+              {
+                text: true,
+                type: 'primary',
+                title: '编辑字典类型',
+                size: 'tiny',
+                style: 'margin-left: 12px;',
+                disabled: !isPermission('EditDict'),
+                onClick: withModifiers(() => handleDictDataEdit(row), ['stop']),
+              },
+              { default: () => '编辑' },
+            ),
+            h(
+              NButton,
+              {
+                text: true,
+                type: 'error',
+                size: 'tiny',
+                style: 'margin-left: 12px;',
+                disabled: !isPermission('DelDict'),
+                onClick: withModifiers(() => handleDictDataDelete(row), ['stop']),
+              },
+              { default: () => '删除' },
+            ),
+          ]
+        },
+      },
     ],
   loading: false,
 })
@@ -109,9 +151,70 @@ const tableOption = ref({
 const tableData = ref([])
 
 /**
+ * 点击添加字典数据按钮触发方法
+ * @param row
+ */
+function handleAddDictData(row) {
+
+}
+
+/**
+ * 点击编辑字典数据按钮触发方法
+ * @param row
+ */
+function handleDictDataEdit(row) {
+
+}
+
+/**
+ * 设置字典数据启用状态方法
+ * @param row
+ */
+async function handleDictDataEnable(row) {
+  const res = await api.setStateDictData({ id: row.id, state: !row.enable })
+  $message.success(res.message)
+  await loadDictData()
+}
+
+/**
+ * 删除字典数据方法
+ * @param row
+ */
+function handleDictDataDelete(row) {
+  const d = $dialog.warning({
+    content: '确定删除？',
+    title: '提示',
+    positiveText: '确定',
+    negativeText: '取消',
+    async onPositiveClick() {
+      try {
+        d.loading = true
+        const result = await api.delDictData({ ids: [row.id] })
+        if (result.success) {
+          $message.success('删除成功')
+          await loadDictData()
+        }
+        else {
+          $message.error(result.msg)
+        }
+        d.loading = false
+      }
+      catch (error) {
+        d.loading = false
+        $message.error(error)
+      }
+    },
+  })
+}
+
+/**
  * 加载字典数据
  */
 async function loadDictData() {
+  // 未选中节点不查询
+  if (!currentNode.value) {
+    return
+  }
   // 显示加载层
   tableOption.value.loading = true
   // 请求字典数据
@@ -148,6 +251,32 @@ async function initData() {
   treeOption.value.treeLoading = false
   // 加载字典数据
   await loadDictData()
+}
+
+/**
+ * 点击添加字典类型按钮触发方法
+ * @param row
+ */
+function handleAddDictType(row) {
+
+}
+
+/**
+ * 点击编辑字典类型按钮触发方法
+ * @param row
+ */
+function handleEditDictType(row) {
+
+}
+
+/**
+ * 设置字典类型启用状态方法
+ * @param row
+ */
+async function handleDictTypeEnable(row) {
+  const res = await api.setStateDictType({ id: row.id, state: !row.enable })
+  $message.success(res.message)
+  await initData()
 }
 
 /**
@@ -226,8 +355,8 @@ function renderSuffix({ option }) {
         type: 'primary',
         title: '新增下级字典类型',
         size: 'tiny',
-        disabled: !isPermission('AddResources'),
-        onClick: withModifiers(() => handleAdd({ parentId: option.id }), ['stop']),
+        disabled: !isPermission('AddDict'),
+        onClick: withModifiers(() => handleAddDictType({ parentId: option.id }), ['stop']),
       },
       { default: () => '新增' },
     ),
@@ -239,8 +368,8 @@ function renderSuffix({ option }) {
         title: '编辑字典类型',
         size: 'tiny',
         style: 'margin-left: 12px;',
-        disabled: !isPermission('AddResources'),
-        onClick: withModifiers(() => handleAdd({ parentId: option.id }), ['stop']),
+        disabled: !isPermission('EditDict'),
+        onClick: withModifiers(() => handleEditDictType(option), ['stop']),
       },
       { default: () => '编辑' },
     ),
@@ -251,7 +380,7 @@ function renderSuffix({ option }) {
         type: 'error',
         size: 'tiny',
         style: 'margin-left: 12px;',
-        disabled: false,
+        disabled: !isPermission('DelDict'),
         onClick: withModifiers(() => handleDictTypeDelete(option), ['stop']),
       },
       { default: () => '删除' },
