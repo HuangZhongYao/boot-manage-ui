@@ -13,7 +13,7 @@
           <NButton class="ml-12" type="primary" ghost quaternary @click="initData">
             <i class="i-fe:rotate-ccw mr-4 text-14" />
           </NButton>
-          <NButton v-permission="'AddDict'" class="ml-12" type="primary" @click="handleAddDictType()">
+          <NButton v-permission="'AddDict'" class="ml-12" type="primary" @click="handleAddDictType">
             <i class="i-material-symbols:add mr-4 text-14" />
             新增
           </NButton>
@@ -53,6 +53,22 @@
           virtual-scroll
         />
       </n-flex>
+      <n-modal
+        v-model:show="treeOption.showModal"
+        class="custom-card"
+        preset="card"
+        :title="treeOption.modalTitle"
+        size="small"
+        close-on-esc
+        :mask-closable="false"
+        :style="treeOption.bodyStyle"
+        :bordered="false"
+      >
+
+        <template #action>
+          action
+        </template>
+      </n-modal>
     </n-flex>
   </CommonPage>
 </template>
@@ -73,6 +89,13 @@ const treeData = ref([])
 const treeOption = ref({
   pattern: '',
   treeLoading: true,
+  showModal: false,
+  modalTitle: '',
+  modalAction: '',
+  modalForm: {},
+  bodyStyle: {
+    width: '600px',
+  },
 })
 // 树当前选中节点
 const currentNode = ref(null)
@@ -258,7 +281,10 @@ async function initData() {
  * @param row
  */
 function handleAddDictType(row) {
-
+  treeOption.value.showModal = true
+  treeOption.value.modalForm = row
+  treeOption.value.modalAction = 'add'
+  treeOption.value.modalTitle = row.name ? `${row.name || ''} 新增下级字典类型` : '新增字典类型'
 }
 
 /**
@@ -266,7 +292,10 @@ function handleAddDictType(row) {
  * @param row
  */
 function handleEditDictType(row) {
-
+  treeOption.value.showModal = true
+  treeOption.value.modalForm = row
+  treeOption.value.modalAction = 'edit'
+  treeOption.value.modalTitle = `编辑${row.name}`
 }
 
 /**
@@ -356,7 +385,7 @@ function renderSuffix({ option }) {
         title: '新增下级字典类型',
         size: 'tiny',
         disabled: !isPermission('AddDict'),
-        onClick: withModifiers(() => handleAddDictType({ parentId: option.id }), ['stop']),
+        onClick: withModifiers(() => handleAddDictType(option), ['stop']),
       },
       { default: () => '新增' },
     ),
