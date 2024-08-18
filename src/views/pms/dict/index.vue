@@ -53,7 +53,7 @@
 </template>
 
 <script setup>
-import {NButton, NDataTable, NIcon, NSwitch} from 'naive-ui'
+import { NButton, NDataTable, NIcon, NSwitch } from 'naive-ui'
 import { ChevronForward } from '@vicons/ionicons5'
 import { withModifiers } from 'vue'
 import api from './api.js'
@@ -151,6 +151,37 @@ async function initData() {
 }
 
 /**
+ * 删除字典类型
+ * @param row
+ */
+function handleDictTypeDelete(row) {
+  const d = $dialog.warning({
+    content: '确定删除？',
+    title: '提示',
+    positiveText: '确定',
+    negativeText: '取消',
+    async onPositiveClick() {
+      try {
+        d.loading = true
+        const result = await api.delDictType({ ids: [row.id] })
+        if (result.success) {
+          $message.success('删除成功')
+          initData()
+        }
+        else {
+          $message.error(result.msg)
+        }
+        d.loading = false
+      }
+      catch (error) {
+        d.loading = false
+        $message.error(error)
+      }
+    },
+  })
+}
+
+/**
  * 选中树节点
  * @param keys
  * @param option
@@ -220,8 +251,8 @@ function renderSuffix({ option }) {
         type: 'error',
         size: 'tiny',
         style: 'margin-left: 12px;',
-        disabled: !isPermission('DelResources'),
-        onClick: withModifiers(() => handleDelete(option), ['stop']),
+        disabled: false,
+        onClick: withModifiers(() => handleDictTypeDelete(option), ['stop']),
       },
       { default: () => '删除' },
     ),
