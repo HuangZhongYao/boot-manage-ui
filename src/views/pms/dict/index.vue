@@ -69,6 +69,22 @@
           action
         </template>
       </n-modal>
+      <n-modal
+        v-model:show="tableOption.showModal"
+        class="custom-card"
+        preset="card"
+        :title="tableOption.modalTitle"
+        size="small"
+        close-on-esc
+        :mask-closable="false"
+        :style="tableOption.bodyStyle"
+        :bordered="false"
+      >
+
+        <template #action>
+          action
+        </template>
+      </n-modal>
     </n-flex>
   </CommonPage>
 </template>
@@ -169,6 +185,13 @@ const tableOption = ref({
       },
     ],
   loading: false,
+  showModal: false,
+  modalTitle: '',
+  modalAction: '',
+  modalForm: {},
+  bodyStyle: {
+    width: '600px',
+  },
 })
 // 表格数据
 const tableData = ref([])
@@ -178,7 +201,10 @@ const tableData = ref([])
  * @param row
  */
 function handleAddDictData(row) {
-
+  tableOption.value.showModal = true
+  tableOption.value.modalForm = row
+  tableOption.value.modalAction = 'add'
+  tableOption.value.modalTitle = `新增字典数据`
 }
 
 /**
@@ -186,7 +212,10 @@ function handleAddDictData(row) {
  * @param row
  */
 function handleDictDataEdit(row) {
-
+  tableOption.value.showModal = true
+  tableOption.value.modalForm = row
+  tableOption.value.modalAction = 'edit'
+  tableOption.value.modalTitle = `编辑${row.name}`
 }
 
 /**
