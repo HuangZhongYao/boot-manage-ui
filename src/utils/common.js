@@ -11,6 +11,15 @@
 import dayjs from 'dayjs'
 
 /**
+ * 验证值是否是数字
+ * @param value
+ * @returns {boolean|boolean}
+ */
+export function onlyAllowNumber(value) {
+  return !value || /^\d+$/.test(value)
+}
+
+/**
  * 日期时间格式化函数 默认格式化YYYY-MM-DD HH:mm:ss
  * @param {(object | string | number)} time
  * @param {string} format

@@ -63,12 +63,67 @@
         :mask-closable="false"
         :style="treeOption.bodyStyle"
         :bordered="false"
+        hoverable
       >
+        <n-descriptions label-placement="top" bordered :column="1">
+          <n-descriptions-item label="所属上级" :span="2">
+            <n-tree-select
+              :options="treeData"
+              :default-value="treeOption.modalForm.parentId"
+              @update:value="treeSelectChange"
+            />
+          </n-descriptions-item>
+
+          <n-descriptions-item label="类型名称">
+            <n-input v-model:value="treeOption.modalForm.name" type="text" />
+          </n-descriptions-item>
+
+          <n-descriptions-item label="排序">
+            <n-input
+              v-model:value="treeOption.modalForm.sort"
+              type="text"
+              :allow-input="onlyAllowNumber"
+              placeholder="值越小越靠前"
+            />
+          </n-descriptions-item>
+
+          <n-descriptions-item label="备注">
+            <n-input
+              v-model:value="treeOption.modalForm.remark"
+              type="textarea"
+              maxlength="240"
+              clearable
+              show-count
+            />
+          </n-descriptions-item>
+
+          <n-descriptions-item label="状态">
+            <NSwitch
+              v-model:value="treeOption.modalForm.enable"
+              size="large"
+            >
+              <template #checked>
+                启用
+              </template>
+              <template #unchecked>
+                禁用
+              </template>
+            </NSwitch>
+          </n-descriptions-item>
+        </n-descriptions>
 
         <template #action>
-          action
+          <n-flex justify="end">
+            <NButton @click.prevent="treeOption.showModal = false">
+              取消
+            </NButton>
+            <NButton type="primary" @click.prevent="saveDictType">
+              保存
+            </NButton>
+          </n-flex>
         </template>
       </n-modal>
+
       <n-modal
         v-model:show="tableOption.showModal"
         class="custom-card"
@@ -80,7 +135,6 @@
         :style="tableOption.bodyStyle"
         :bordered="false"
       >
-
         <template #action>
           action
         </template>
@@ -94,6 +148,7 @@ import { NButton, NDataTable, NIcon, NSwitch } from 'naive-ui'
 import { ChevronForward } from '@vicons/ionicons5'
 import { withModifiers } from 'vue'
 import api from './api.js'
+import { onlyAllowNumber } from '@/utils/common.js'
 import isPermission from '@/utils/permissionsTool.js'
 
 // 定义组件名称。设置keepAlive需将组件的name设置成当前菜单的code。一定要这样写才可以切换页面时保存当前标签页的状态。
@@ -108,7 +163,11 @@ const treeOption = ref({
   showModal: false,
   modalTitle: '',
   modalAction: '',
-  modalForm: {},
+  modalForm: {
+    parentId: 1,
+    sort: 0,
+    enable: true,
+  },
   bodyStyle: {
     width: '600px',
   },
@@ -188,7 +247,9 @@ const tableOption = ref({
   showModal: false,
   modalTitle: '',
   modalAction: '',
-  modalForm: {},
+  modalForm: {
+
+  },
   bodyStyle: {
     width: '600px',
   },
@@ -305,15 +366,36 @@ async function initData() {
   await loadDictData()
 }
 
+function treeSelectChange(value, option) {
+  treeOption.value.modalForm.parentId = value
+}
+
+/**
+ * 字典类型添加或编辑保存方法
+ */
+async function saveDictType() {
+  // 关闭模态框
+  treeOption.value.showModal = false
+  // 刷新数据
+  await initData()
+}
+
 /**
  * 点击添加字典类型按钮触发方法
  * @param row
  */
 function handleAddDictType(row) {
   treeOption.value.showModal = true
-  treeOption.value.modalForm = row
+  treeOption.value.modalForm = {}
   treeOption.value.modalAction = 'add'
-  treeOption.value.modalTitle = row.name ? `${row.name || ''} 新增下级字典类型` : '新增字典类型'
+  if (row.name) {
+    // 新增下级
+    treeOption.value.modalForm.parentId = row.id
+    treeOption.value.modalTitle = `${row.name || ''} 新增下级字典类型`
+  }
+  else {
+    treeOption.value.modalTitle = '新增字典类型'
+  }
 }
 
 /**
