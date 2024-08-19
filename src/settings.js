@@ -1,4 +1,10 @@
 /**
+ * 项目名
+ * @type {string}
+ */
+export const projectName = 'boot-admin'
+
+/**
  * 默认的布局样式。 empty|full|normal|simple
  * @constant defaultLayout
  * @type {string}

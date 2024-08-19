@@ -8,8 +8,9 @@
  **********************************/
 
 import { createStorage } from './storage'
+import { projectName } from '@/settings.js'
 
-const prefixKey = 'vue-naive-admin_'
+const prefixKey = `${projectName}_`
 
 export const createLocalStorage = function (option = {}) {
   return createStorage({

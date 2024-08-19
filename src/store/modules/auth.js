@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { projectName } from '@/settings.js'
 import { usePermissionStore, useRouterStore, useTabStore, useUserStore } from '@/store'
 
 /**
@@ -84,9 +85,9 @@ export const useAuthStore = defineStore('auth', {
   },
   /**
    * 配置持久化选项。
-   * 指定store的状态应保存在名为'vue-naivue-admin_auth'的key下。
+   * 指定store的状态应保存在名为'${projectName}_auth'的key下。
    */
   persist: {
-    key: 'vue-naivue-admin_auth',
+    key: `${projectName}_auth`,
   },
 })
