@@ -1,16 +1,16 @@
 <!--------------------------------
--  商城订单表管理
+-  车辆表管理
  - Desc   Created by Velocity Generate.
- - Time   2024-07-31 10:03:05
+ - Time   2024-07-31 20:23:37
  - Author zuuuYao (https://github.com/HuangZhongYao)
  - Copyright © 2024 ZuuuuYao By Github
  --------------------------------->
 <template>
   <CommonPage>
     <template #action>
-      <NButton v-permission="'AddBusOrder'" size="small" type="primary" @click="handelAdd">
+      <NButton v-permission="'AddBusTruck'" size="small" type="primary" @click="handelAdd">
         <i class="i-material-symbols:add mr-4 text-18" />
-        创建商城订单
+        创建车辆
       </NButton>
     </template>
     <AppCard bordered bg="#fafafc dark:black" class="mb-30 min-h-60 rounded-4">
@@ -75,32 +75,52 @@
           size="medium"
           label-placement="left"
         >
-          <n-form-item label="订单号" path="orderNo">
-            <n-input v-model:value="formValue.orderNo" placeholder="请输入订单号" />
+          <n-form-item label="品牌" path="brand">
+            <n-input v-model:value="formValue.brand" placeholder="请输入品牌" />
           </n-form-item>
 
-          <n-form-item label="商品" path="commodity">
-            <n-input v-model:value="formValue.commodity" placeholder="请输入商品" />
+          <n-form-item label="发动机编号" path="engineNo">
+            <n-input v-model:value="formValue.engineNo" placeholder="请输入发动机编号" />
           </n-form-item>
 
-          <n-form-item label="下单时间" path="orderTime">
-            <n-input v-model:value="formValue.orderTime" placeholder="请输入下单时间" />
+          <n-form-item label="文档编号" path="fileNo">
+            <n-input v-model:value="formValue.fileNo" placeholder="请输入文档编号" />
           </n-form-item>
 
-          <n-form-item label="收货地址" path="address">
-            <n-input v-model:value="formValue.address" placeholder="请输入收货地址" />
+          <n-form-item label="发证机关" path="issuers">
+            <n-input v-model:value="formValue.issuers" placeholder="请输入发证机关" />
           </n-form-item>
 
-          <n-form-item label="收货人" path="consignee">
-            <n-input v-model:value="formValue.consignee" placeholder="请输入收货人" />
+          <n-form-item label="型号" path="model">
+            <n-input v-model:value="formValue.model" placeholder="请输入型号" />
           </n-form-item>
 
-          <n-form-item label="收货人电话" path="consigneePhone">
-            <n-input v-model:value="formValue.consigneePhone" placeholder="请输入收货人电话" />
+          <n-form-item label="车辆所有人" path="owner">
+            <n-input v-model:value="formValue.owner" placeholder="请输入车辆所有人" />
           </n-form-item>
 
-          <n-form-item label="支付状态" path="payState">
-            <n-input v-model:value="formValue.payState" placeholder="请输入支付状态" />
+          <n-form-item label="车牌号" path="plateNo">
+            <n-input v-model:value="formValue.plateNo" placeholder="请输入车牌号" />
+          </n-form-item>
+
+          <n-form-item label="总质量kg" path="quality">
+            <n-input v-model:value="formValue.quality" placeholder="请输入总质量kg" />
+          </n-form-item>
+
+          <n-form-item label="注册日期" path="regDate">
+            <n-input v-model:value="formValue.regDate" placeholder="请输入注册日期" />
+          </n-form-item>
+
+          <n-form-item label="使用性质" path="useCharacter">
+            <n-input v-model:value="formValue.useCharacter" placeholder="请输入使用性质" />
+          </n-form-item>
+
+          <n-form-item label="车型" path="vehicleType">
+            <n-input v-model:value="formValue.vehicleType" placeholder="请输入车型" />
+          </n-form-item>
+
+          <n-form-item label="VIN车辆识别代码" path="vin">
+            <n-input v-model:value="formValue.vin" placeholder="请输入VIN车辆识别代码" />
           </n-form-item>
 
         </n-form>
@@ -121,10 +141,10 @@
 import { ref } from 'vue'
 import { NButton, NDataTable } from 'naive-ui'
 import api from './api.js'
-import { MeQueryItem } from '@/components'
+import { MeQueryItem } from '@/components/index.js'
 import isPermission from '@/utils/permissionsTool.js'
-// 定义组件名
-defineOptions({ name: 'BusOrderMgt' })
+// 定义组件名称。设置keepAlive需将组件的name设置成当前菜单的code。一定要这样写才可以切换页面时保存当前标签页的状态。
+defineOptions({ name: 'BusTruckMgt' })
 
 // 进入页面时执行
 onMounted(() => {
@@ -135,38 +155,63 @@ onMounted(() => {
 // 表格标题及单元格数据定义
 const columns = [
   {
-    title: '订单号',
-    key: 'orderNo',
+    title: '品牌',
+    key: 'brand',
     ellipsis: { tooltip: true },
   },
   {
-    title: '商品',
-    key: 'commodity',
+    title: '发动机编号',
+    key: 'engineNo',
     ellipsis: { tooltip: true },
   },
   {
-    title: '下单时间',
-    key: 'orderTime',
+    title: '文档编号',
+    key: 'fileNo',
     ellipsis: { tooltip: true },
   },
   {
-    title: '收货地址',
-    key: 'address',
+    title: '发证机关',
+    key: 'issuers',
     ellipsis: { tooltip: true },
   },
   {
-    title: '收货人',
-    key: 'consignee',
+    title: '型号',
+    key: 'model',
     ellipsis: { tooltip: true },
   },
   {
-    title: '收货人电话',
-    key: 'consigneePhone',
+    title: '车辆所有人',
+    key: 'owner',
     ellipsis: { tooltip: true },
   },
   {
-    title: '支付状态',
-    key: 'payState',
+    title: '车牌号',
+    key: 'plateNo',
+    ellipsis: { tooltip: true },
+  },
+  {
+    title: '总质量kg',
+    key: 'quality',
+    ellipsis: { tooltip: true },
+  },
+  {
+    title: '注册日期',
+    key: 'regDate',
+    ellipsis: { tooltip: true },
+  },
+  {
+    title: '使用性质',
+    key: 'useCharacter',
+    ellipsis: { tooltip: true },
+  },
+  {
+    title: '车型',
+    key: 'vehicleType',
+    ellipsis: { tooltip: true },
+  },
+  {
+    title: 'VIN车辆识别代码',
+    key: 'vin',
     ellipsis: { tooltip: true },
   },
   {
@@ -182,7 +227,7 @@ const columns = [
             size: 'tiny',
             type: 'primary',
             style: 'margin-left: 12px;',
-            disabled: !isPermission('EditBusOrder'),
+            disabled: !isPermission('EditBusTruck'),
             onClick: () => handelEdit(row),
           },
           {
@@ -197,7 +242,7 @@ const columns = [
             size: 'tiny',
             type: 'error',
             style: 'margin-left: 12px;',
-            disabled: !isPermission('DelBusOrder'),
+            disabled: !isPermission('DelBusTruck'),
             onClick: () => handleDelete({ ids: [row.id] }),
           },
           {
@@ -328,39 +373,64 @@ const formRef = ref(null)
 const formValue = ref({})
 // 表单验证规则
 const rules = {
-  orderNo: {
+  brand: {
     required: false,
-    message: '请输入订单号',
+    message: '请输入品牌',
     trigger: ['input', 'blur'],
   },
-  commodity: {
+  engineNo: {
     required: false,
-    message: '请输入商品',
+    message: '请输入发动机编号',
     trigger: ['input', 'blur'],
   },
-  orderTime: {
+  fileNo: {
     required: false,
-    message: '请输入下单时间',
+    message: '请输入文档编号',
     trigger: ['input', 'blur'],
   },
-  address: {
+  issuers: {
     required: false,
-    message: '请输入收货地址',
+    message: '请输入发证机关',
     trigger: ['input', 'blur'],
   },
-  consignee: {
+  model: {
     required: false,
-    message: '请输入收货人',
+    message: '请输入型号',
     trigger: ['input', 'blur'],
   },
-  consigneePhone: {
+  owner: {
     required: false,
-    message: '请输入收货人电话',
+    message: '请输入车辆所有人',
     trigger: ['input', 'blur'],
   },
-  payState: {
+  plateNo: {
     required: false,
-    message: '请输入支付状态',
+    message: '请输入车牌号',
+    trigger: ['input', 'blur'],
+  },
+  quality: {
+    required: false,
+    message: '请输入总质量kg',
+    trigger: ['input', 'blur'],
+  },
+  regDate: {
+    required: false,
+    message: '请输入注册日期',
+    trigger: ['input', 'blur'],
+  },
+  useCharacter: {
+    required: false,
+    message: '请输入使用性质',
+    trigger: ['input', 'blur'],
+  },
+  vehicleType: {
+    required: false,
+    message: '请输入车型',
+    trigger: ['input', 'blur'],
+  },
+  vin: {
+    required: false,
+    message: '请输入VIN车辆识别代码',
     trigger: ['input', 'blur'],
   },
 }
@@ -381,7 +451,7 @@ function handelAdd() {
   // 显示抽屉
   drawerShowFlag.value = true
   // 设置抽屉标题
-  getDrawerTitle.value = '创建商城订单'
+  getDrawerTitle.value = '创建车辆'
   // 设置抽屉操作类型
   drawerSaveType = 'add'
 }
@@ -394,7 +464,7 @@ function handelEdit(row) {
   // 显示抽屉
   drawerShowFlag.value = true
   // 设置抽屉标题
-  getDrawerTitle.value = '编辑商城订单'
+  getDrawerTitle.value = '编辑车辆'
   // 设置抽屉操作类型
   drawerSaveType = 'edit'
   // 设置编辑数据回显值

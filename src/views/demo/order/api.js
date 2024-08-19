@@ -1,4 +1,4 @@
-import { request } from '@/utils'
+import { request } from '@/utils/index.js'
 
 /**
  * 商城订单Api接口
