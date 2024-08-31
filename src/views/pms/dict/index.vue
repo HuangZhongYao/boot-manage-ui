@@ -65,52 +65,58 @@
         :bordered="false"
         hoverable
       >
-        <n-descriptions label-placement="top" bordered :column="1">
-          <n-descriptions-item label="所属上级" :span="2">
-            <n-tree-select
-              :options="treeData"
-              :default-value="treeOption.modalForm.parentId"
-              @update:value="treeSelectChange"
-            />
-          </n-descriptions-item>
-
-          <n-descriptions-item label="类型名称">
-            <n-input v-model:value="treeOption.modalForm.name" type="text" />
-          </n-descriptions-item>
-
-          <n-descriptions-item label="排序">
-            <n-input
-              v-model:value="treeOption.modalForm.sort"
-              type="text"
-              :allow-input="onlyAllowNumber"
-              placeholder="值越小越靠前"
-            />
-          </n-descriptions-item>
-
-          <n-descriptions-item label="备注">
-            <n-input
-              v-model:value="treeOption.modalForm.remark"
-              type="textarea"
-              maxlength="240"
-              clearable
-              show-count
-            />
-          </n-descriptions-item>
-
-          <n-descriptions-item label="状态">
-            <NSwitch
-              v-model:value="treeOption.modalForm.enable"
-              size="large"
-            >
-              <template #checked>
-                启用
-              </template>
-              <template #unchecked>
-                禁用
-              </template>
-            </NSwitch>
-          </n-descriptions-item>
-        </n-descriptions>
+        <n-form
+          ref="treeModalRef"
+          :rules="treeOption.modalRule"
+          :model="treeOption.modalForm"
+        >
+          <n-descriptions label-placement="top" bordered :column="1">
+            <n-descriptions-item label="所属上级" :span="2">
+              <n-tree-select
+                :options="treeData"
+                :default-value="treeOption.modalForm.parentId"
+                @update:value="treeSelectChange"
+              />
+            </n-descriptions-item>
+            <n-descriptions-item label="类型名称">
+              <n-form-item :show-label="false" path="name">
+                <n-input v-model:value="treeOption.modalForm.name" type="text" />
+              </n-form-item>
+            </n-descriptions-item>
+            <n-descriptions-item label="排序">
+              <n-form-item :show-label="false" path="sort">
+                <n-input
+                  v-model:value="treeOption.modalForm.sort"
+                  type="text"
+                  :allow-input="onlyAllowNumber"
+                  placeholder="值越小越靠前"
+                />
+              </n-form-item>
+            </n-descriptions-item>
+            <n-descriptions-item label="备注">
+              <n-input
+                v-model:value="treeOption.modalForm.remark"
+                type="textarea"
+                maxlength="240"
+                clearable
+                show-count
+              />
+            </n-descriptions-item>
+            <n-descriptions-item label="状态">
+              <NSwitch
+                v-model:value="treeOption.modalForm.enable"
+                size="large"
+              >
+                <template #checked>
+                  启用
+                </template>
+                <template #unchecked>
+                  禁用
+                </template>
+              </NSwitch>
+            </n-descriptions-item>
+          </n-descriptions>
+        </n-form>
 
         <template #action>
           <n-flex justify="end">
@@ -163,15 +169,30 @@ const treeOption = ref({
   showModal: false,
   modalTitle: '',
   modalAction: '',
-  modalForm: {
-    parentId: 1,
-    sort: 0,
-    enable: true,
+  modalActionAdd: 'add',
+  modalActionEdit: 'edit',
+  modalForm: { },
+  modalRule: {
+    name: {
+      required: true,
+      message: '请输入字典类型名称',
+      trigger: 'blur',
+    },
+    sort: {
+      required: true,
+      message: '请输入排序值',
+      trigger: 'blur',
+      type: 'number',
+    },
   },
   bodyStyle: {
     width: '600px',
   },
 })
+
+// 树模态框
+const treeModalRef = ref(null)
+
 // 树当前选中节点
 const currentNode = ref(null)
 
@@ -304,11 +325,11 @@ function handleDictDataDelete(row) {
         d.loading = true
         const result = await api.delDictData({ ids: [row.id] })
         if (result.success) {
-          $message.success('删除成功')
+          $message.success(result.message)
           await loadDictData()
         }
         else {
-          $message.error(result.msg)
+          $message.error(result.message)
         }
         d.loading = false
       }
@@ -374,10 +395,35 @@ function treeSelectChange(value, option) {
  * 字典类型添加或编辑保存方法
  */
 async function saveDictType() {
-  // 关闭模态框
-  treeOption.value.showModal = false
-  // 刷新数据
-  await initData()
+  // 验证表单
+  await treeModalRef.value?.validate(async (errors) => {
+    if (!errors) {
+      let res
+      if (treeOption.value.modalAction === treeOption.value.modalActionAdd) {
+        // 添加保存
+        res = await api.addDictType(treeOption.value.modalForm)
+      }
+      else if (treeOption.value.modalAction === treeOption.value.modalActionEdit) {
+        // 编辑保存
+        res = await api.editDictType(treeOption.value.modalForm)
+      }
+      await saveDictTypeResultHandel(res)
+    }
+  })
+}
+
+/**
+ * 处理保存接口调用
+ * @param res
+ */
+async function saveDictTypeResultHandel(res) {
+  if (res?.success) {
+    $message.success(res.message)
+    // 刷新数据
+    await initData()
+    // 关闭模态框
+    treeOption.value.showModal = false
+  }
 }
 
 /**
@@ -386,8 +432,12 @@ async function saveDictType() {
  */
 function handleAddDictType(row) {
   treeOption.value.showModal = true
-  treeOption.value.modalForm = {}
-  treeOption.value.modalAction = 'add'
+  treeOption.value.modalForm = {
+    sort: 0,
+    enable: true,
+    remark: '',
+  }
+  treeOption.value.modalAction = treeOption.value.modalActionAdd
   if (row.name) {
     // 新增下级
     treeOption.value.modalForm.parentId = row.id
@@ -405,18 +455,8 @@ function handleAddDictType(row) {
 function handleEditDictType(row) {
   treeOption.value.showModal = true
   treeOption.value.modalForm = row
-  treeOption.value.modalAction = 'edit'
+  treeOption.value.modalAction = treeOption.value.modalActionEdit
   treeOption.value.modalTitle = `编辑${row.name}`
-}
-
-/**
- * 设置字典类型启用状态方法
- * @param row
- */
-async function handleDictTypeEnable(row) {
-  const res = await api.setStateDictType({ id: row.id, state: !row.enable })
-  $message.success(res.message)
-  await initData()
 }
 
 /**
@@ -434,11 +474,11 @@ function handleDictTypeDelete(row) {
         d.loading = true
         const result = await api.delDictType({ ids: [row.id] })
         if (result.success) {
-          $message.success('删除成功')
+          $message.success(result.message)
           initData()
         }
         else {
-          $message.error(result.msg)
+          $message.error(result.message)
         }
         d.loading = false
       }
