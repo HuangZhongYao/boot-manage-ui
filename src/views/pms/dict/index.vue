@@ -74,6 +74,8 @@
               <n-tree-select
                 :options="treeData"
                 :default-value="treeOption.modalForm.parentId"
+                key-field="id"
+                label-field="name"
                 @update:value="treeSelectChange"
               />
             </n-descriptions-item>
@@ -470,14 +472,7 @@ async function initData() {
   treeOption.value.treeLoading = true
   // 请求树结构数据
   const res = await api.getDictTypeTree()
-  // 转换
-  treeData.value = res?.result?.map(item => ({
-    ...item,
-    key: item.id,
-    label: item.name,
-    disabled: !item.enable,
-    children: item.children,
-  })) || []
+  treeData.value = res?.result || []
   // 关闭树加载层
   treeOption.value.treeLoading = false
   // 加载字典数据
