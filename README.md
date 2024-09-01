@@ -80,7 +80,7 @@ Boot Admin 提供一套Java最新技术开发的后端代码，简易上手、�
 ## 文档
 
 - 项目文档:
-- 接口文档:
+- 接口文档: [在线Apifox接口文档](https://apifox.com/apidoc/shared-328df828-c5b1-44b0-abfb-357ef8276d29)
 
 ## 版权说明
 
