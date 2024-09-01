@@ -49,10 +49,9 @@
           :loading="tableOption.loading"
           :data="tableData"
           :pagination="false"
-          :max-height="600"
-          virtual-scroll
         />
       </n-flex>
+      <!--  树新增编辑模块框    -->
       <n-modal
         v-model:show="treeOption.showModal"
         class="custom-card"
@@ -105,6 +104,7 @@
             <n-descriptions-item label="状态">
               <NSwitch
                 v-model:value="treeOption.modalForm.enable"
+                :default-value="true"
                 size="large"
               >
                 <template #checked>
@@ -130,6 +130,7 @@
         </template>
       </n-modal>
 
+      <!--  数据表格新增编辑模态框    -->
       <n-modal
         v-model:show="tableOption.showModal"
         class="custom-card"
@@ -141,8 +142,59 @@
         :style="tableOption.bodyStyle"
         :bordered="false"
       >
+        <n-form
+          ref="tableModalRef"
+          :rules="tableOption.tabModalRule"
+          :model="tableOption.tabModalForm"
+        >
+          <n-form-item label="名称" label-placement="left" path="name">
+            <n-input v-model:value="tableOption.tabModalForm.name" type="text" />
+          </n-form-item>
+          <n-form-item label="编码" label-placement="left" path="code">
+            <n-input v-model:value="tableOption.tabModalForm.code" type="text" />
+          </n-form-item>
+          <n-form-item label="排序" label-placement="left" path="sort">
+            <n-input
+              v-model:value="tableOption.tabModalForm.sort"
+              default-value="0"
+              :allow-input="onlyAllowNumber"
+              placeholder="值越小越靠前"
+              type="text"
+            />
+          </n-form-item>
+          <n-form-item label="状态" :show-feedback="false" label-placement="left" path="enable">
+            <NSwitch
+              v-model:value="tableOption.tabModalForm.enable"
+              :default-value="true"
+              size="large"
+            >
+              <template #checked>
+                启用
+              </template>
+              <template #unchecked>
+                禁用
+              </template>
+            </NSwitch>
+          </n-form-item>
+          <n-form-item class="mt-6" label="备注" label-placement="top">
+            <n-input
+              v-model:value="tableOption.tabModalForm.remark"
+              type="textarea"
+              maxlength="240"
+              clearable
+              show-count
+            />
+          </n-form-item>
+        </n-form>
         <template #action>
-          action
+          <n-flex justify="end">
+            <NButton @click.prevent="tableOption.showModal = false">
+              取消
+            </NButton>
+            <NButton type="primary" @click.prevent="saveDictData">
+              保存
+            </NButton>
+          </n-flex>
         </template>
       </n-modal>
     </n-flex>
@@ -192,7 +244,6 @@ const treeOption = ref({
 
 // 树模态框
 const treeModalRef = ref(null)
-
 // 树当前选中节点
 const currentNode = ref(null)
 
@@ -201,8 +252,8 @@ const tableOption = ref({
   columns:
     [
       { title: '创建时间', key: 'createdTime', width: 120, ellipsis: { tooltip: true } },
-      { title: '编码', key: 'code', width: 100, ellipsis: { tooltip: true } },
       { title: '名称', key: 'name', width: 100, ellipsis: { tooltip: true } },
+      { title: '编码', key: 'code', width: 100, ellipsis: { tooltip: true } },
       { title: '排序值', key: 'sort', width: 100, ellipsis: { tooltip: true } },
       {
         title: '启用状态',
@@ -268,8 +319,20 @@ const tableOption = ref({
   showModal: false,
   modalTitle: '',
   modalAction: '',
-  modalForm: {
-
+  modalActionAdd: 'add',
+  modalActionEdit: 'edit',
+  tabModalForm: {},
+  tabModalRule: {
+    name: {
+      required: true,
+      message: '请输入字典名称',
+      trigger: 'blur',
+    },
+    code: {
+      required: true,
+      message: '请输入字典编码',
+      trigger: 'blur',
+    },
   },
   bodyStyle: {
     width: '600px',
@@ -277,16 +340,50 @@ const tableOption = ref({
 })
 // 表格数据
 const tableData = ref([])
+// 数据表格模态框
+const tableModalRef = ref(null)
+
+/**
+ * 数据表格模态框保存数据方法
+ */
+function saveDictData() {
+  tableModalRef.value?.validate(async (errors) => {
+    if (!errors) {
+      let res
+      if (tableOption.value.modalAction === tableOption.value.modalActionAdd) {
+        // 添加数据
+        res = await api.addDictData(tableOption.value.tabModalForm)
+      }
+      else if (tableOption.value.modalAction === tableOption.value.modalActionEdit) {
+        // 编辑数据
+        res = await api.editDictData(tableOption.value.tabModalForm)
+      }
+      if (res?.success) {
+        $message.success(res.message)
+        // 关闭模态框
+        tableOption.value.showModal = false
+        // 查询字典数据
+        await loadDictData()
+      }
+      else {
+        $message.error(res.message)
+      }
+    }
+  })
+}
 
 /**
  * 点击添加字典数据按钮触发方法
- * @param row
  */
-function handleAddDictData(row) {
+function handleAddDictData() {
   tableOption.value.showModal = true
-  tableOption.value.modalForm = row
-  tableOption.value.modalAction = 'add'
-  tableOption.value.modalTitle = `新增字典数据`
+  tableOption.value.tabModalForm = {
+    dictTypeId: currentNode.value.id,
+    enable: true,
+    sort: 0,
+  }
+  tableOption.value.modalAction = tableOption.value.modalActionAdd
+  tableOption.value.modalTitle = `新增${currentNode.value.name}字典数据`
 }
 
 /**
@@ -295,8 +392,8 @@ function handleAddDictData(row) {
  */
 function handleDictDataEdit(row) {
   tableOption.value.showModal = true
-  tableOption.value.modalForm = row
-  tableOption.value.modalAction = 'edit'
+  tableOption.value.tabModalForm = { ...row }
+  tableOption.value.modalAction = tableOption.value.modalActionEdit
   tableOption.value.modalTitle = `编辑${row.name}`
 }
 
@@ -454,7 +551,7 @@ function handleAddDictType(row) {
  */
 function handleEditDictType(row) {
   treeOption.value.showModal = true
-  treeOption.value.modalForm = row
+  treeOption.value.modalForm = { ...row }
   treeOption.value.modalAction = treeOption.value.modalActionEdit
   treeOption.value.modalTitle = `编辑${row.name}`
 }
