@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://github.com/HuangZhongYao/boot-manage-ui">
-    <img alt="Boot Admin Logo" width="200" src="./src/assets/images/logo.png">
+    <img alt="Boot Admin Logo" width="200" src="/public/favicon.png">
   </a>
 </p>
 <p align="center">
