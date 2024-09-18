@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://github.com/HuangZhongYao/boot-manage-ui">
-    <img alt="Boot Admin Logo" width="200" src="/public/favicon.png">
+    <img alt="Boot Admin Logo" width="200" src="./public/favicon.png">
   </a>
 </p>
 <p align="center">
@@ -70,6 +70,7 @@ npm run preview
 ## 后端
 
 Boot Admin 提供一套Java最新技术开发的后端代码，简易上手、效率高SpringBoot单体架构版，提供RABC、代码生成、系统基础等接口所需的一些基础接口  。
+
 技术栈:
 - Java 17
 - SpringBoot 3.2.x
