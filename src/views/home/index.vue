@@ -35,7 +35,7 @@
             target="_blank"
             @click.prevent="message?.info('官网正在火速开发中...')"
           >
-            isme.top
+            官网
           </a>
         </template>
 
