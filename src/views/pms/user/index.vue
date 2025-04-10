@@ -432,7 +432,7 @@ const columns = [
     key: 'createdTime',
     width: 120,
     render(row) {
-      return h('span', formatDateTime(row.createTime))
+      return h('span', formatDateTime(row.createdTime))
     },
   },
   {
