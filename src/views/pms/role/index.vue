@@ -433,7 +433,7 @@ const columns = [
     title: '创建时间',
     key: 'createdTime',
     render(row) {
-      return h('span', formatDateTime(row.createTime))
+      return h('span', formatDateTime(row.createdTime))
     },
   },
   {
