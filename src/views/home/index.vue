@@ -28,17 +28,6 @@
         </p>
       </n-card>
       <n-card class="ml-12 w-70%" title="✨ 欢迎使用 Boot Admin">
-        <template #header-extra>
-          <a
-            class="text-14 text-primary text-highlight hover:underline hover:opacity-80"
-            href="https://isme.top"
-            target="_blank"
-            @click.prevent="message?.info('官网正在火速开发中...')"
-          >
-            官网
-          </a>
-        </template>
-
         <p class="opacity-60">
           这是一款极简风格的后台管理模板，包含前后端解决方案，前端使用 Vite + Vue3 + Pinia +
           Unocss，后端使用 Java17 + SpringBoot 3.x +
@@ -49,7 +38,7 @@
             type="primary"
             ghost
             tag="a"
-            href="https://docs.isme.top/web/#/624306705/188522224"
+            href="#"
             target="__blank"
           >
             开发文档
