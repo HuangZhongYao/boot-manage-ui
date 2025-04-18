@@ -63,7 +63,7 @@ export const basePermissions = [
         code: 'ShowDocs',
         name: '项目文档',
         type: 'MENU',
-        path: '#',
+        path: 'https://apifox.com/apidoc/shared-328df828-c5b1-44b0-abfb-357ef8276d29',
         icon: 'i-me:docs',
         order: 1,
         enable: true,
