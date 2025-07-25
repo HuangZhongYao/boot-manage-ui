@@ -34,6 +34,8 @@ export default defineConfig({
       // 添加额外的 CSS 属性，如 display: inline-block，使图标正确显示
       extraProperties: {
         display: 'inline-block',
+        width: '1em',
+        height: '1em',
       },
       // 定义自定义图标集合，使用 FileSystemIconLoader 加载本地图标文件
       collections: {
