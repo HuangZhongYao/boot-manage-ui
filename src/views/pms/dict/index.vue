@@ -66,58 +66,59 @@
       >
         <n-form
           ref="treeModalRef"
+          label-align="left"
+          label-placement="left"
+          :label-width="80"
           :rules="treeOption.modalRule"
           :model="treeOption.modalForm"
         >
-          <n-descriptions label-placement="top" bordered :column="1">
-            <n-descriptions-item label="所属上级" :span="2">
-              <n-tree-select
-                :options="treeData"
-                :default-value="treeOption.modalForm.parentId"
-                key-field="id"
-                label-field="name"
-                @update:value="treeSelectChange"
-              />
-            </n-descriptions-item>
-            <n-descriptions-item label="类型名称">
-              <n-form-item :show-label="false" path="name">
-                <n-input v-model:value="treeOption.modalForm.name" type="text" />
-              </n-form-item>
-            </n-descriptions-item>
-            <n-descriptions-item label="排序">
-              <n-form-item :show-label="false" path="sort">
-                <n-input
-                  v-model:value="treeOption.modalForm.sort"
-                  type="text"
-                  :allow-input="onlyAllowNumber"
-                  placeholder="值越小越靠前"
-                />
-              </n-form-item>
-            </n-descriptions-item>
-            <n-descriptions-item label="备注">
-              <n-input
-                v-model:value="treeOption.modalForm.remark"
-                type="textarea"
-                maxlength="240"
-                clearable
-                show-count
-              />
-            </n-descriptions-item>
-            <n-descriptions-item label="状态">
-              <NSwitch
-                v-model:value="treeOption.modalForm.enable"
-                :default-value="true"
-                size="large"
-              >
-                <template #checked>
-                  启用
-                </template>
-                <template #unchecked>
-                  禁用
-                </template>
-              </NSwitch>
-            </n-descriptions-item>
-          </n-descriptions>
+          <n-form-item path="parentId" label="所属上级">
+            <n-tree-select
+              :options="treeData"
+              :default-value="treeOption.modalForm.parentId"
+              placeholder="默认顶级"
+              key-field="id"
+              label-field="name"
+              @update:value="treeSelectChange"
+            />
+          </n-form-item>
+          <n-form-item path="name" label="类型名称">
+            <n-input v-model:value="treeOption.modalForm.name" type="text" />
+          </n-form-item>
+          <n-form-item path="code" label="类型编码">
+            <n-input v-model:value="treeOption.modalForm.code" type="text" />
+          </n-form-item>
+          <n-form-item path="sort" label="排序">
+            <n-input
+              v-model:value="treeOption.modalForm.sort"
+              type="text"
+              :allow-input="onlyAllowNumber"
+              placeholder="值越小越靠前"
+            />
+          </n-form-item>
+          <n-form-item label="备注">
+            <n-input
+              v-model:value="treeOption.modalForm.remark"
+              type="textarea"
+              maxlength="240"
+              clearable
+              show-count
+            />
+          </n-form-item>
+          <n-form-item path="enable" label="状态">
+            <NSwitch
+              v-model:value="treeOption.modalForm.enable"
+              :default-value="true"
+              size="large"
+            >
+              <template #checked>
+                启用
+              </template>
+              <template #unchecked>
+                禁用
+              </template>
+            </NSwitch>
+          </n-form-item>
         </n-form>
 
         <template #action>
@@ -227,9 +228,19 @@ const treeOption = ref({
   modalActionEdit: 'edit',
   modalForm: { },
   modalRule: {
+    parentId: {
+      required: false,
+      message: '请选择所属上级',
+      trigger: 'blur',
+    },
     name: {
       required: true,
       message: '请输入字典类型名称',
+      trigger: 'blur',
+    },
+    code: {
+      required: true,
+      message: '请输入字典编码',
       trigger: 'blur',
     },
     sort: {
